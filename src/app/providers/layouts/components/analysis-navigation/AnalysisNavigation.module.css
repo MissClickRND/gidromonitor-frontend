@@ -1,0 +1,78 @@
+.wrapper {
+  position: fixed;
+  z-index: 200;
+  top: 16px;
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
+}
+
+.island {
+  display: flex;
+  height: 45.6px;
+  min-height: 45.6px;
+  align-items: center;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(250, 252, 252, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.link {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: #173a4c;
+  font-size: 14px;
+  text-align: center;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  background: rgba(0, 80, 123, 0.09);
+}
+
+.link[data-active] {
+  background: #153f55;
+  height: 30px;
+  color: white;
+}
+
+@media (max-width: 64em) {
+  .link {
+    min-width: 0;
+    padding: 0 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 48em) {
+  .wrapper {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    transform: none;
+  }
+
+  .island {
+    padding: 5px;
+  }
+
+  .island > div {
+    justify-content: space-between;
+  }
+
+  .link {
+    flex: 1;
+    padding: 0 7px;
+    font-size: 12px;
+  }
+}

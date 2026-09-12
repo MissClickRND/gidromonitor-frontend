@@ -1,0 +1,14 @@
+.page {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  background: #dce8e8;
+}
+
+@media (max-width: 48em) {
+  .page {
+    min-height: 560px;
+  }
+}

@@ -1,0 +1,54 @@
+.form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 22px 18px 18px;
+  overflow-y: auto;
+}
+
+.stepNumber {
+  display: grid;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--mantine-color-primary-6);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.segmentedRoot {
+  height: 42px;
+  min-height: 42px;
+  padding: 4px;
+  align-items: stretch;
+  background: #edf3f5;
+}
+
+.segmentedLabel {
+  display: flex;
+  height: 34px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.submitButton {
+  min-height: 50px;
+  margin-top: auto;
+}
+
+@media (max-width: 48em) {
+  .form {
+    padding: 16px;
+  }
+
+  .submitButton {
+    margin-top: 22px;
+  }
+}

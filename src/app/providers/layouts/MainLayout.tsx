@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import Header from "./components/header/Header";
+import AnalysisNavigation from "./components/analysis-navigation/AnalysisNavigation";
 
 export default function MainLayout() {
   return (
     <>
-      <Header />
+      <AnalysisNavigation />
       <Outlet />
     </>
   );

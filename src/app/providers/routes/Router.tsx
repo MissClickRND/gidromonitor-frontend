@@ -1,5 +1,6 @@
 import { ApiPage } from "@/pages/api";
 import { AnalysisPage } from "@/pages/analysis";
+import { AnalysisResultPage } from "@/pages/analysis-result";
 import { CalculationsPage } from "@/pages/calculations";
 import { Main } from "@/pages/main";
 import { PageTransitionProvider } from "@/shared/ui/page-transition";
@@ -19,15 +20,19 @@ const router = createBrowserRouter([
     element: <TransitionLayout />,
     children: [
       {
-        path: "/",
-        element: <Main />,
-      },
-      {
         element: <MainLayout />,
         children: [
           {
+            path: "/",
+            element: <Main />,
+          },
+          {
             path: "/analysis",
             element: <AnalysisPage />,
+          },
+          {
+            path: "/analysis/result",
+            element: <AnalysisResultPage />,
           },
           {
             path: "/calculations",

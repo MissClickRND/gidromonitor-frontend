@@ -2,7 +2,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { useRef } from "react";
 import { usePageTransition } from "@/shared/ui/page-transition";
 import { HowItWorksPanel } from "@/widgets/how-it-works";
-import { LandingHero } from "@/widgets/landing-hero";
+import LandingHero from "./components/LandingHero";
+import LandingBrand from "./components/LandingBrand";
 
 export default function Main() {
   const howItWorksButtonRef = useRef<HTMLButtonElement>(null);
@@ -12,6 +13,7 @@ export default function Main() {
 
   return (
     <>
+      <LandingBrand onNavigate={navigateWithTransition} />
       <LandingHero
         howItWorksButtonRef={howItWorksButtonRef}
         onNavigate={navigateWithTransition}

@@ -1,0 +1,184 @@
+.page {
+  min-height: 100svh;
+  padding: 8px;
+  background: #1d1d1d;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  min-height: calc(100svh - 16px);
+  overflow: hidden;
+  border-radius: 14px;
+  background-image:
+    linear-gradient(rgba(4, 22, 26, 0.38), rgba(4, 22, 26, 0.38)),
+    url("/img/main.png");
+  background-position: center;
+  background-size: cover;
+  isolation: isolate;
+}
+
+.hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    circle at 50% 48%,
+    transparent 10%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+  content: "";
+}
+
+.brandButton {
+  position: fixed;
+  z-index: 201;
+  top: 18px;
+  left: 18px;
+  padding: 4px;
+  border-radius: 10px;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.42);
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.brandButton:hover,
+.brandButton:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.02);
+}
+
+.brandTitle {
+  font-size: 20px;
+}
+
+.content {
+  align-self: center;
+  justify-self: center;
+  width: min(920px, calc(100% - 40px));
+  margin-top: 44px;
+  text-align: center;
+}
+
+.title {
+  color: #fff;
+  font-family: "YS Text", sans-serif;
+  font-size: clamp(2.25rem, 4.05vw, 4rem);
+  font-weight: 300;
+  line-height: 1.4;
+  letter-spacing: -0.035em;
+  text-shadow: 0 3px 22px rgba(0, 0, 0, 0.36);
+  text-transform: uppercase;
+}
+
+.titleLine {
+  display: block;
+  white-space: normal;
+  text-wrap: nowrap;
+}
+
+.scriptInitial {
+  display: inline-block;
+  margin-right: -0.03em;
+  font-family: "Great Vibes", cursive;
+  font-size: 1.36em;
+  font-weight: 400;
+  line-height: 0;
+  transform: translateY(-0.05em) translateX(0.02em);
+}
+
+.actions {
+  width: min(660px, 100%);
+}
+
+.actionMotion {
+  flex: 1;
+  min-width: 240px;
+}
+
+.primaryAction,
+.secondaryAction {
+  width: 100%;
+  height: 56px;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 400;
+  letter-spacing: 0;
+  transition: box-shadow 180ms ease;
+}
+
+.primaryAction {
+  background: #0c3951;
+  box-shadow: 0 12px 30px rgba(4, 28, 42, 0.28);
+}
+
+.primaryAction:hover {
+  background: #0f4562;
+  box-shadow: 0 15px 34px rgba(4, 28, 42, 0.35);
+}
+
+.secondaryAction {
+  color: #20323a;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+}
+
+@media (width < 768px) {
+  .titleLine {
+    text-wrap: wrap;
+    font-size: 7vw;
+  }
+}
+
+@media (max-width: 48em) {
+  .brandButton {
+    top: 62px;
+    left: 16px;
+  }
+
+  .brandTitle {
+    font-size: 17px;
+  }
+
+  .page {
+    padding: 6px;
+  }
+
+  .hero {
+    min-height: calc(100svh - 12px);
+    border-radius: 12px;
+    background-position: 48% center;
+  }
+
+  .content {
+    width: calc(100% - 40px);
+    max-width: 420px;
+    margin-top: 38px;
+  }
+
+  .title {
+    font-size: clamp(2rem, 8.6vw, 2.7rem);
+    line-height: 1.1;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actionMotion {
+    flex: auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    height: 54px;
+    font-size: var(--mantine-font-size-md);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryAction,
+  .secondaryAction {
+    transition-duration: 0.01ms;
+  }
+}
