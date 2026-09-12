@@ -1,10 +1,10 @@
-# Frontend Lyaguh Template
+# ГидроМонитор — frontend
 
 Шаблон моих проектов для быстрого создания
 
-Установленные библиотеки :
+Основные библиотеки:
 - React + TS
-- RTK
+- TanStack Query
 - MantineUI
 - ReactRouter
 - TablerIcons (Первая загрузка может быть долгим из-за этой библиотеки, если вы сталкиваетесь с проблемой производительности можете попробовать заменить ее на похожие, по типу ReactIcons)
@@ -15,7 +15,7 @@
 
 Классический FSD:
 ```text
-Lyaguh-Template
+gidromonitor-frontend
 ├─ index.html
 ├─ package-lock.json
 ├─ package.json
@@ -29,12 +29,6 @@ Lyaguh-Template
 │  ├─ app
 │  │  ├─ main.tsx
 │  │  ├─ providers
-│  │  │  ├─ store
-│  │  │  │  ├─ listeners
-│  │  │  │  ├─ listenersMiddleware.ts
-│  │  │  │  ├─ loadStates
-│  │  │  │  │  └─ loadSettingsState.ts
-│  │  │  │  └─ store.ts
 │  │  │  └─ styles
 │  │  │     └─ index.css
 │  │  ├─ theme.ts
@@ -47,10 +41,15 @@ Lyaguh-Template
 │  │  └─ Main
 │  │     ├─ index.ts
 │  │     └─ Main.page.tsx
+│  ├─ entities
+│  │  ├─ auth
+│  │  └─ user
 │  ├─ shared
+│  │  ├─ api
+│  │  │  ├─ baseQuery.ts
+│  │  │  └─ queryClient.ts
 │  │  └─ lib
-│  │     ├─ index.ts
-│  │     └─ store.ts
+│  │     └─ hooks
 │  └─ widgets
 │     └─ Read.txt
 ├─ tsconfig.json

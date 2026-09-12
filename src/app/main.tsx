@@ -1,25 +1,24 @@
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "maplibre-gl/dist/maplibre-gl.css";
+import "./providers/styles/index.css";
 
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
-import { store } from "./providers/store/store";
+import { queryClient } from "@/shared/api";
 import { theme } from "./theme";
 import { Router } from "./providers/routes/Router";
-import { AuthGuard } from "./providers/guards/AuthGuard";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme}>
-        <AuthGuard>
-          <Notifications />
-          <Router />
-        </AuthGuard>
+        <Notifications />
+        <Router />
       </MantineProvider>
-    </Provider>
+    </QueryClientProvider>
   </React.StrictMode>,
 );

@@ -1,0 +1,101 @@
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(30, 124, 139, 0.2), transparent 32%),
+    linear-gradient(145deg, #07191e 0%, #0b252c 48%, #07171c 100%);
+}
+
+.scrollArea {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.panelContent {
+  gap: 64px;
+}
+
+.closeButton {
+  position: fixed;
+  top: 22px;
+  right: 24px;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.eyebrow,
+.updateLabel {
+  color: #67d0d1;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.panelTitle {
+  color: #fff;
+  font-size: clamp(3rem, 8vw, 6.7rem);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.introText {
+  color: var(--mantine-color-gray-2);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.65;
+}
+
+.stepCard {
+  min-height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(12px);
+}
+
+.stepNumber {
+  color: rgba(103, 208, 209, 0.72);
+  font-size: 2.7rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.stepTitle {
+  color: #fff;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  font-weight: 500;
+}
+
+.updateCard {
+  border: 1px solid rgba(103, 208, 209, 0.26);
+  color: #fff;
+  background: linear-gradient(125deg, rgba(25, 103, 112, 0.34), rgba(255, 255, 255, 0.04));
+}
+
+.updateTitle {
+  color: #fff;
+  font-size: clamp(1.65rem, 3vw, 2.7rem);
+  font-weight: 400;
+}
+
+@media (max-width: 48em) {
+  .panelContent {
+    gap: 40px;
+  }
+
+  .closeButton {
+    top: 14px;
+    right: 14px;
+  }
+}

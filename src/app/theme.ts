@@ -2,19 +2,23 @@ import { createTheme } from "@mantine/core";
 
 export const theme = createTheme({
   primaryColor: "primary",
+  fontFamily: "YS Text, sans-serif",
+  headings: {
+    fontFamily: "YS Text, sans-serif",
+  },
 
   colors: {
     primary: [
-      "#fdf2f4",
-      "#f5d5da",
-      "#e8a8b2",
-      "#d97a89",
-      "#c94d61",
-      "#b32d44",
-      "#8b1a2f",
-      "#721527",
-      "#59101e",
-      "#400b16",
+      "#eef8fc",
+      "#d8edf6",
+      "#b4dbea",
+      "#8ac5dc",
+      "#5aa9c6",
+      "#2b8bad",
+      "#00507b",
+      "#003f61",
+      "#002f49",
+      "#001f31",
     ],
   },
 

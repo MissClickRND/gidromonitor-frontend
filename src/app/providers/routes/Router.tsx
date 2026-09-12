@@ -1,37 +1,45 @@
-import { Error404 } from "@/pages/errors/Error404";
+import { ApiPage } from "@/pages/api";
+import { AnalysisPage } from "@/pages/analysis";
+import { CalculationsPage } from "@/pages/calculations";
 import { Main } from "@/pages/main";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import { Login, Register } from "@/pages/auth";
+import { PageTransitionProvider } from "@/shared/ui/page-transition";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
+
+function TransitionLayout() {
+  return (
+    <PageTransitionProvider>
+      <Outlet />
+    </PageTransitionProvider>
+  );
+}
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <MainLayout />,
+    element: <TransitionLayout />,
     children: [
       {
         path: "/",
         element: <Main />,
       },
-    ],
-  },
-  {
-    path: "/auth",
-    children: [
       {
-        path: "/auth/login",
-        element: <Login />,
-      },
-      {
-        path: "/auth/register",
-        element: <Register />,
+        element: <MainLayout />,
+        children: [
+          {
+            path: "/analysis",
+            element: <AnalysisPage />,
+          },
+          {
+            path: "/calculations",
+            element: <CalculationsPage />,
+          },
+          {
+            path: "/api",
+            element: <ApiPage />,
+          },
+        ],
       },
     ],
-  },
-  {
-    path: "*",
-    element: <Error404 />,
   },
 ]);
 

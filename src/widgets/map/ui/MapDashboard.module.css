@@ -1,0 +1,68 @@
+.map {
+  position: relative;
+  min-height: 460px;
+  height: clamp(460px, 64vh, 620px);
+  overflow: hidden;
+  border-radius: var(--mantine-radius-xl);
+  background: var(--mantine-color-gray-2);
+  box-shadow: 0 16px 45px rgba(11, 52, 74, 0.12);
+}
+
+.map :global(.maplibregl-map) {
+  position: absolute;
+  inset: 0;
+}
+
+.heading {
+  position: absolute;
+  top: clamp(20px, 4vw, 44px);
+  left: clamp(20px, 4vw, 52px);
+  z-index: 2;
+  width: min(510px, calc(100% - 40px));
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(12px);
+}
+
+.stats {
+  position: absolute;
+  right: clamp(20px, 4vw, 52px);
+  bottom: clamp(20px, 4vw, 44px);
+  left: clamp(20px, 4vw, 52px);
+  z-index: 2;
+}
+
+.statCard {
+  min-height: 116px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+}
+
+.statValue {
+  color: var(--mantine-color-primary-6);
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+@media (max-width: 48em) {
+  .map {
+    min-height: 620px;
+    height: 720px;
+  }
+
+  .heading {
+    top: 16px;
+    left: 16px;
+    width: calc(100% - 32px);
+  }
+
+  .stats {
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .statCard {
+    min-height: auto;
+  }
+}
