@@ -1,0 +1,17 @@
+.page {
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  padding: 100px 24px 32px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(97, 191, 194, 0.26), transparent 42%),
+    #eaf3f4;
+}
+
+.placeholder {
+  width: min(620px, 100%);
+  padding: clamp(32px, 8vw, 72px) 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(18px);
+}

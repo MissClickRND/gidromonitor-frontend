@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@gfazioli/mantine-compare": "^0.6.2",
     "@mantine/core": "^8.3.2",
     "@mantine/dates": "^8.3.17",
     "@mantine/form": "^8.3.2",

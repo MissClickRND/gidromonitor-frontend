@@ -1,15 +1,15 @@
 import { useTerritoryGeometry } from "@/features/create-analysis";
-import { usePageTransition } from "@/shared/ui/page-transition";
 import { AnalysisMap } from "@/widgets/analysis-map";
 import { AnalysisSidebar } from "@/widgets/analysis-sidebar";
 import { Box } from "@mantine/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AnalysisProgressSheet from "./components/AnalysisProgressSheet";
 import styles from "./Analysis.page.module.css";
 
 export default function AnalysisPage() {
   const geometry = useTerritoryGeometry();
-  const { navigateWithTransition } = usePageTransition();
+  const navigate = useNavigate();
   const [analysisRunning, setAnalysisRunning] = useState(false);
   const [navigateAfterClose, setNavigateAfterClose] = useState(false);
 
@@ -21,7 +21,7 @@ export default function AnalysisPage() {
   const handleSheetExit = () => {
     if (!navigateAfterClose) return;
     setNavigateAfterClose(false);
-    navigateWithTransition("/analysis/result");
+    navigate("/analysis/result");
   };
 
   return (

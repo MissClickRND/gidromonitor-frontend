@@ -1,0 +1,73 @@
+.compare,
+.compareRoot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mapPane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #183f46;
+}
+
+.mapPane :global(.maplibregl-map) {
+  width: 100%;
+  height: 100%;
+}
+
+.mapLabel {
+  position: absolute;
+  top: 84px;
+  box-sizing: border-box;
+  width: 132px;
+  height: 49px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(7, 33, 39, 0.72);
+  color: white;
+}
+
+.mapLabelTitle {
+  color: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.mapLabelDate {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.mapLabel[data-side="before"] {
+  left: 22px;
+}
+
+.mapLabel[data-side="after"] {
+  right: 22px;
+}
+
+.slider {
+  z-index: 4;
+}
+
+.sliderLine {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.sliderButton {
+  box-shadow: 0 8px 22px rgba(0, 29, 34, 0.26);
+}
+
+@media (max-width: 48em) {
+  .mapLabel {
+    top: 126px;
+    left: 12px !important;
+    width: 124px;
+  }
+}

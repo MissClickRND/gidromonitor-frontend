@@ -1,0 +1,55 @@
+.panel {
+  position: fixed;
+  z-index: 20;
+  right: 24px;
+  bottom: 142px;
+  width: 254px;
+  overflow: hidden;
+  background: rgba(250, 253, 253, 0.95);
+  backdrop-filter: blur(18px);
+}
+
+.trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 14px;
+  color: #173a4c;
+}
+
+.chevron {
+  transition: transform 180ms ease;
+}
+
+.chevron[data-opened] {
+  transform: rotate(180deg);
+}
+
+.layers {
+  padding: 0 14px 12px;
+}
+
+.sensorGroup {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #d9e5e7;
+}
+
+.layer {
+  min-height: 29px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+@media (max-width: 48em) {
+  .panel {
+    right: 12px;
+    bottom: 190px;
+    width: min(254px, calc(100% - 24px));
+  }
+}

@@ -85,12 +85,13 @@ export default function AnalysisMap({
     !geometryIsValid &&
     projectedCoordinates[0];
 
-  const deleteControl = geometryIsValid && projectedCoordinates[0]
-    ? {
-        left: projectedCoordinates[0][0],
-        top: Math.max(projectedCoordinates[0][1] - 12, 46),
-      }
-    : null;
+  const deleteControl =
+    geometryIsValid && projectedCoordinates[0]
+      ? {
+          left: projectedCoordinates[0][0],
+          top: Math.max(projectedCoordinates[0][1] - 12, 46),
+        }
+      : null;
 
   const handleClick = (event: MapLayerMouseEvent) => {
     if (mode !== "polygon" || geometryIsValid) return;

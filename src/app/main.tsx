@@ -1,6 +1,7 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@gfazioli/mantine-compare/styles.css";
 import "dayjs/locale/ru";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./providers/styles/index.css";

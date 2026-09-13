@@ -76,6 +76,23 @@
   position: absolute;
   z-index: 3;
   transform: translate(-50%, -50%);
+  transition: transform 0.2s ease;
+}
+
+.closeTarget:hover {
+  transform: translate(-50%, -60%);
+}
+
+.closeTarget:active {
+  transform: translate(-50%, -40%);
+}
+
+.deleteControl:hover {
+  transform: translate(-50%, -110%);
+}
+
+.deleteControl:active {
+  transform: translate(-50%, -90%);
 }
 
 .closeTarget {
