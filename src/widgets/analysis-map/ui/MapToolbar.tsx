@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   Combobox,
+  Group,
   Loader,
   Paper,
   TextInput,
@@ -8,6 +9,7 @@ import {
   useCombobox,
 } from "@mantine/core";
 import {
+  IconArrowBackUp,
   IconMap2,
   IconSatellite,
   IconSearch,
@@ -20,13 +22,17 @@ import styles from "./AnalysisMap.module.css";
 
 type MapToolbarProps = {
   streetsView: boolean;
+  canUndo: boolean;
   onToggleStyle: () => void;
+  onUndo: () => void;
   onSearchCity: (query: string) => Promise<CitySearchResult | null>;
 };
 
 export default function MapToolbar({
   streetsView,
+  canUndo,
   onToggleStyle,
+  onUndo,
   onSearchCity,
 }: MapToolbarProps) {
   const [query, setQuery] = useState("");
@@ -89,31 +95,45 @@ export default function MapToolbar({
   return (
     <Paper className={styles.toolbar} radius="lg" shadow="lg">
       <Paper className={styles.modeControl} radius="md" shadow="sm">
-        <Tooltip
-          label={
-            streetsView
-              ? "Включить спутниковую карту"
-              : "Включить обычную карту"
-          }
-        >
-          <ActionIcon
-            size={36}
-            variant="subtle"
-            color="primary"
-            aria-label={
+        <Group gap={2} wrap="nowrap">
+          <Tooltip
+            label={
               streetsView
                 ? "Включить спутниковую карту"
                 : "Включить обычную карту"
             }
-            onClick={onToggleStyle}
           >
-            {streetsView ? (
-              <IconSatellite size={24} stroke={1.7} />
-            ) : (
-              <IconMap2 size={24} stroke={1.7} />
-            )}
-          </ActionIcon>
-        </Tooltip>
+            <ActionIcon
+              size={36}
+              variant="subtle"
+              color="primary"
+              aria-label={
+                streetsView
+                  ? "Включить спутниковую карту"
+                  : "Включить обычную карту"
+              }
+              onClick={onToggleStyle}
+            >
+              {streetsView ? (
+                <IconSatellite size={24} stroke={1.7} />
+              ) : (
+                <IconMap2 size={24} stroke={1.7} />
+              )}
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label="Отменить последний шаг">
+            <ActionIcon
+              size={36}
+              variant="subtle"
+              color="primary"
+              aria-label="Отменить последний шаг"
+              disabled={!canUndo}
+              onClick={onUndo}
+            >
+              <IconArrowBackUp size={21} stroke={1.7} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
       </Paper>
 
       <Paper className={styles.searchControl} radius="md" shadow="sm">

@@ -12,12 +12,9 @@ import styles from "./AnalysisSidebar.module.css";
 
 type AnalysisSidebarProps = {
   mode: TerritoryMode;
-  coordinates: Coordinate[];
   closedCoordinates: Coordinate[];
   geometryIsValid: boolean;
   onModeChange: (mode: TerritoryMode) => void;
-  onUndo: () => void;
-  onClear: () => void;
   onAnalysisStart: (payload: AnalysisPayload) => void;
 };
 

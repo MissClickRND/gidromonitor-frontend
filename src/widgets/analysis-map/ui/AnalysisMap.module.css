@@ -71,6 +71,25 @@
   pointer-events: none;
 }
 
+.closeTarget,
+.deleteControl {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+}
+
+.closeTarget {
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.9),
+    0 0 0 5px rgba(0, 122, 133, 0.55),
+    0 3px 8px rgba(0, 58, 64, 0.35);
+}
+
+.deleteControl {
+  transform: translate(-50%, -100%);
+  box-shadow: 0 4px 12px rgba(102, 17, 17, 0.3);
+}
+
 .shape,
 .line {
   stroke: #007a85;

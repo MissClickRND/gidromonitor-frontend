@@ -1,4 +1,6 @@
 import type { Coordinate, TerritoryMode } from "@/features/create-analysis";
+import { ActionIcon, Tooltip } from "@mantine/core";
+import { IconCheck, IconTrash } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Map, {
   ScaleControl,
@@ -19,6 +21,9 @@ type AnalysisMapProps = {
   geometryIsValid: boolean;
   onAddPolygonPoint: (point: Coordinate) => void;
   onSetRectangle: (points: Coordinate[]) => void;
+  onClosePolygon: () => void;
+  onUndo: () => void;
+  onClear: () => void;
 };
 
 function createRectangle(start: Coordinate, end: Coordinate): Coordinate[] {
@@ -36,6 +41,9 @@ export default function AnalysisMap({
   geometryIsValid,
   onAddPolygonPoint,
   onSetRectangle,
+  onClosePolygon,
+  onUndo,
+  onClear,
 }: AnalysisMapProps) {
   const mapRef = useRef<MapRef>(null);
   const [rectangleStart, setRectangleStart] = useState<Coordinate | null>(null);
@@ -71,8 +79,21 @@ export default function AnalysisMap({
     .map(([x, y]) => `${x},${y}`)
     .join(" ");
 
+  const closeTarget =
+    mode === "polygon" &&
+    coordinates.length >= 3 &&
+    !geometryIsValid &&
+    projectedCoordinates[0];
+
+  const deleteControl = geometryIsValid && projectedCoordinates[0]
+    ? {
+        left: projectedCoordinates[0][0],
+        top: Math.max(projectedCoordinates[0][1] - 12, 46),
+      }
+    : null;
+
   const handleClick = (event: MapLayerMouseEvent) => {
-    if (mode !== "polygon") return;
+    if (mode !== "polygon" || geometryIsValid) return;
     onAddPolygonPoint([event.lngLat.lng, event.lngLat.lat]);
   };
 
@@ -128,7 +149,10 @@ export default function AnalysisMap({
         mapStyle={streetsView ? streetsStyleUrl : mapStyleUrl}
         attributionControl={false}
         dragPan={mode !== "rectangle"}
+        dragRotate={false}
         doubleClickZoom={false}
+        touchPitch={false}
+        touchZoomRotate={false}
         cursor={
           rectangleStart
             ? "crosshair"
@@ -149,7 +173,9 @@ export default function AnalysisMap({
 
       <MapToolbar
         streetsView={streetsView}
+        canUndo={coordinates.length > 0}
         onToggleStyle={() => setStreetsView((current) => !current)}
+        onUndo={onUndo}
         onSearchCity={searchCity}
       />
 
@@ -170,6 +196,48 @@ export default function AnalysisMap({
           />
         ))}
       </svg>
+
+      {closeTarget && (
+        <Tooltip label="Замкнуть контур" position="top" withArrow>
+          <ActionIcon
+            className={styles.closeTarget}
+            style={{ left: closeTarget[0], top: closeTarget[1] }}
+            variant="filled"
+            color="primary"
+            radius="xl"
+            size={22}
+            aria-label="Замкнуть контур"
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              onClosePolygon();
+            }}
+          >
+            <IconCheck size={13} stroke={2.3} />
+          </ActionIcon>
+        </Tooltip>
+      )}
+
+      {deleteControl && (
+        <Tooltip label="Удалить область" position="bottom" withArrow>
+          <ActionIcon
+            className={styles.deleteControl}
+            style={deleteControl}
+            variant="filled"
+            color="red"
+            radius="xl"
+            size="lg"
+            aria-label="Удалить область"
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              onClear();
+            }}
+          >
+            <IconTrash size={18} stroke={1.8} />
+          </ActionIcon>
+        </Tooltip>
+      )}
     </section>
   );
 }

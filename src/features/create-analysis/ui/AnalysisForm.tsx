@@ -15,23 +15,17 @@ import styles from "./AnalysisForm.module.css";
 
 type AnalysisFormProps = {
   mode: TerritoryMode;
-  coordinates: Coordinate[];
   closedCoordinates: Coordinate[];
   geometryIsValid: boolean;
   onModeChange: (mode: TerritoryMode) => void;
-  onUndo: () => void;
-  onClear: () => void;
   onAnalysisStart: (payload: AnalysisPayload) => void;
 };
 
 export default function AnalysisForm({
   mode,
-  coordinates,
   closedCoordinates,
   geometryIsValid,
   onModeChange,
-  onUndo,
-  onClear,
   onAnalysisStart,
 }: AnalysisFormProps) {
   const [territoryError, setTerritoryError] = useState<string | null>(null);
@@ -102,11 +96,8 @@ export default function AnalysisForm({
         <FormSection number={2} title="Выберите территорию">
           <TerritoryControls
             mode={mode}
-            canEdit={coordinates.length > 0}
             error={territoryError}
             onModeChange={handleModeChange}
-            onUndo={onUndo}
-            onClear={onClear}
           />
         </FormSection>
 

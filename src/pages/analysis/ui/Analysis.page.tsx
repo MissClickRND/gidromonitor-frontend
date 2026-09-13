@@ -33,15 +33,15 @@ export default function AnalysisPage() {
           geometryIsValid={geometry.isValid}
           onAddPolygonPoint={geometry.addPolygonPoint}
           onSetRectangle={geometry.setRectangle}
+          onClosePolygon={geometry.closePolygon}
+          onUndo={geometry.undo}
+          onClear={geometry.clear}
         />
         <AnalysisSidebar
           mode={geometry.mode}
-          coordinates={geometry.coordinates}
           closedCoordinates={geometry.closedCoordinates}
           geometryIsValid={geometry.isValid}
           onModeChange={geometry.setMode}
-          onUndo={geometry.undo}
-          onClear={geometry.clear}
           onAnalysisStart={() => setAnalysisRunning(true)}
         />
       </Box>
