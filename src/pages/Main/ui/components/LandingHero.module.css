@@ -33,17 +33,18 @@
 .brandButton {
   position: fixed;
   z-index: 201;
-  top: 18px;
-  left: 18px;
-  padding: 4px;
+  top: 16px;
+  left: 16px;
+
   border-radius: 10px;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.42);
-  transition: background-color 150ms ease, transform 150ms ease;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
 }
 
 .brandButton:hover,
 .brandButton:focus-visible {
-  background: rgba(255, 255, 255, 0.12);
   transform: scale(1.02);
 }
 
@@ -129,12 +130,11 @@
 
 @media (max-width: 48em) {
   .brandButton {
-    top: 62px;
-    left: 16px;
+    top: 10px;
   }
 
   .brandTitle {
-    font-size: 17px;
+    display: none;
   }
 
   .page {

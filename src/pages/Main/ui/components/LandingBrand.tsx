@@ -13,7 +13,7 @@ export default function LandingBrand({ onNavigate }: LandingBrandProps) {
       onClick={() => onNavigate("/")}
     >
       <Group className={styles.brand} gap={8} align="center" wrap="nowrap">
-        <Image src="/favicon.svg" alt="" w={40} h={40} />
+        <Image src="/favicon.svg" alt="" w={46} h={46} />
         <Title order={2} c="white" fw="medium" className={styles.brandTitle}>
           ГидроМонитор
         </Title>
