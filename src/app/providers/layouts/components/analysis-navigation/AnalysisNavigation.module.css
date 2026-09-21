@@ -36,6 +36,7 @@
 
 .link:hover,
 .link:focus-visible {
+  height: 30px;
   background: rgba(0, 80, 123, 0.09);
 }
 
@@ -57,20 +58,24 @@
   .wrapper {
     top: 10px;
     left: 50%;
-    width: max-content;
+    width: calc(100vw - 20px);
     max-width: calc(100vw - 20px);
     transform: translateX(-50%);
   }
 
   .island {
+    width: 100%;
     padding: 5px;
   }
 
   .island > div {
+    width: 100%;
     justify-content: center;
   }
 
   .link {
+    flex: 1 1 0;
+    min-width: 0;
     padding: 0 7px;
     font-size: 12px;
   }

@@ -130,7 +130,7 @@
 
 @media (max-width: 48em) {
   .brandButton {
-    top: 10px;
+    display: none;
   }
 
   .brandTitle {

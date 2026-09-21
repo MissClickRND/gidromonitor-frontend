@@ -1,6 +1,8 @@
-export type TerritoryMode = "polygon" | "rectangle";
+import type { Territory } from "@/entities/areas";
 
-export type Coordinate = [longitude: number, latitude: number];
+export type { Coordinate } from "@/entities/areas";
+
+export type TerritoryMode = "polygon" | "rectangle";
 
 export type AnalysisFormValues = {
   name: string;
@@ -10,8 +12,5 @@ export type AnalysisFormValues = {
 };
 
 export type AnalysisPayload = AnalysisFormValues & {
-  territory: {
-    type: "Polygon";
-    coordinates: Coordinate[][];
-  };
+  territory: Territory;
 };

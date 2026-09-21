@@ -71,21 +71,33 @@
 }
 
 @media (max-width: 48em) {
-  .brand,
-  .actions {
-    top: 68px;
-  }
-
   .brand {
+    top: 68px;
     left: 12px;
   }
 
   .actions {
+    top: 122px;
     right: 12px;
+    left: 12px;
+    justify-content: flex-end;
   }
 
   .secondaryLink {
     padding: 9px 8px;
     font-size: 11px;
+  }
+}
+
+@media (max-width: 24em) {
+  .newAnalysis,
+  .mapStyleButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .secondaryLink {
+    padding: 8px 6px;
+    font-size: 10px;
   }
 }

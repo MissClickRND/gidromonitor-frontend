@@ -1,5 +1,5 @@
 export { default as AnalysisForm } from "./ui/AnalysisForm";
-export { useTerritoryGeometry } from "./model/useTerritoryGeometry";
+export { useTerritoryGeometry } from "./model/hooks/useTerritoryGeometry";
 export type {
   AnalysisFormValues,
   AnalysisPayload,

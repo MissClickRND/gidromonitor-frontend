@@ -3,6 +3,7 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconArrowRight } from "@tabler/icons-react";
 import { useState } from "react";
+import { useCreateArea, type ICreateArea } from "@/entities/areas";
 import type {
   AnalysisFormValues,
   AnalysisPayload,
@@ -21,6 +22,17 @@ type AnalysisFormProps = {
   onAnalysisStart: (payload: AnalysisPayload) => void;
 };
 
+function createUtcIsoDate(value: string | null) {
+  if (!value) return "";
+
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0)).toISOString();
+}
+
+function getDateInputValue(value: string) {
+  return value ? value.slice(0, 10) : null;
+}
+
 export default function AnalysisForm({
   mode,
   closedCoordinates,
@@ -29,6 +41,7 @@ export default function AnalysisForm({
   onAnalysisStart,
 }: AnalysisFormProps) {
   const [territoryError, setTerritoryError] = useState<string | null>(null);
+  const { createAreaAsync, isLoading } = useCreateArea();
   const form = useForm<AnalysisFormValues>({
     mode: "controlled",
     initialValues: {
@@ -55,7 +68,7 @@ export default function AnalysisForm({
     onModeChange(nextMode);
   };
 
-  const handleSubmit = form.onSubmit((values) => {
+  const handleSubmit = form.onSubmit(async (values) => {
     if (!geometryIsValid) {
       setTerritoryError(
         mode === "polygon"
@@ -76,8 +89,19 @@ export default function AnalysisForm({
       },
     };
 
-    console.log("Создание анализа", payload);
-    onAnalysisStart(payload);
+    const request: ICreateArea = {
+      name: payload.name,
+      geometry: payload.territory,
+      dateBefore: new Date(payload.dateBefore),
+      dateAfter: new Date(payload.dateAfter),
+    };
+
+    try {
+      await createAreaAsync(request);
+      onAnalysisStart(payload);
+    } catch {
+      // Ошибка уже отображается через уведомление useCreateArea.
+    }
   });
 
   return (
@@ -107,30 +131,28 @@ export default function AnalysisForm({
               size="md"
               label="Дата до"
               radius="md"
-              value={form.values.dateBefore || null}
+              value={getDateInputValue(form.values.dateBefore)}
               valueFormat="DD.MM.YYYY"
               locale="ru"
               clearable
               placeholder="До"
               error={form.errors.dateBefore}
               onBlur={() => form.validateField("dateBefore")}
-              onChange={(value) =>
-                form.setFieldValue("dateBefore", value ?? "")
-              }
+              onChange={(value) => form.setFieldValue("dateBefore", createUtcIsoDate(value))}
             />
             <DateInput
               size="md"
               label="Дата после"
               radius="md"
               placeholder="После"
-              value={form.values.dateAfter || null}
-              minDate={form.values.dateBefore || undefined}
+              value={getDateInputValue(form.values.dateAfter)}
+              minDate={getDateInputValue(form.values.dateBefore) || undefined}
               valueFormat="DD.MM.YYYY"
               locale="ru"
               clearable
               error={form.errors.dateAfter}
               onBlur={() => form.validateField("dateAfter")}
-              onChange={(value) => form.setFieldValue("dateAfter", value ?? "")}
+              onChange={(value) => form.setFieldValue("dateAfter", createUtcIsoDate(value))}
             />
           </Group>
         </FormSection>
@@ -138,6 +160,7 @@ export default function AnalysisForm({
 
       <Button
         type="submit"
+        loading={isLoading}
         size="md"
         radius="md"
         fullWidth

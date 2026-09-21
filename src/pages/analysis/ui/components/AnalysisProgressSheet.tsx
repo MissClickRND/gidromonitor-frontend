@@ -1,4 +1,5 @@
-import { Button, Drawer, Loader, Stack, Text, Title } from "@mantine/core";
+import { Button, Drawer, Stack, Text, Title } from "@mantine/core";
+import AnalysisProcessingLoader from "./AnalysisProcessingLoader";
 import styles from "./AnalysisProgressSheet.module.css";
 
 type AnalysisProgressSheetProps = {
@@ -30,10 +31,10 @@ export default function AnalysisProgressSheet({
       onExitTransitionEnd={onExitTransitionEnd}
     >
       <Stack align="center" justify="center" className={styles.message}>
-        <Loader size="xl" color="primary" type="dots" aria-label="Загрузка" />
+        <AnalysisProcessingLoader />
         <Stack align="center" gap={8} maw={500}>
           <Title order={2} ta="center" c="#173a4c">
-            Анализ проводится
+            Проводится анализ
           </Title>
           <Text ta="center" c="dimmed" size="lg" aria-live="polite">
             Подождите, обычно это занимает 1–3 минуты.

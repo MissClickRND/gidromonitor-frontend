@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { Coordinate, TerritoryMode } from "./types";
+import type { Coordinate, TerritoryMode } from "../types";
 
 export function useTerritoryGeometry() {
   const [mode, setModeState] = useState<TerritoryMode>("polygon");
@@ -12,10 +12,13 @@ export function useTerritoryGeometry() {
     setIsPolygonClosed(false);
   }, []);
 
-  const addPolygonPoint = useCallback((point: Coordinate) => {
-    if (isPolygonClosed) return;
-    setCoordinates((current) => [...current, point]);
-  }, [isPolygonClosed]);
+  const addPolygonPoint = useCallback(
+    (point: Coordinate) => {
+      if (isPolygonClosed) return;
+      setCoordinates((current) => [...current, point]);
+    },
+    [isPolygonClosed],
+  );
 
   const setRectangle = useCallback((points: Coordinate[]) => {
     setCoordinates(points);

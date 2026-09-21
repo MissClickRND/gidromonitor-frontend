@@ -102,6 +102,12 @@ body {
   font-family: "YS Text", sans-serif;
   background: #1d1d1d;
   color: #15364a;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  max-width: 100%;
 }
 
 button,

@@ -39,6 +39,15 @@
   }
   .heading {
     gap: 16px;
+    flex-wrap: wrap;
+  }
+  .heading :global(.mantine-Button-root) {
+    width: 100%;
+  }
+  .search,
+  .date {
+    flex-basis: 100%;
+    width: 100%;
   }
   .filters :global(.mantine-Group-root) {
     align-items: stretch;

@@ -1,2 +1,2 @@
-export { apiRequest, ApiError, getApiErrorMessage } from "./baseQuery";
+export { apiClient } from "./axiosInstance";
 export { queryClient } from "./queryClient";
