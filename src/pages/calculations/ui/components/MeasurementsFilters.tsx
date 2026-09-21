@@ -3,6 +3,12 @@ import { DateInput } from "@mantine/dates";
 import { IconCalendar, IconSearch, IconX } from "@tabler/icons-react";
 import styles from "../Calculations.page.module.css";
 
+function toDateKey(value: string | null) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toISOString().slice(0, 10);
+}
+
 type Props = {
   query: string;
   startDate: string | null;
@@ -30,7 +36,7 @@ export default function MeasurementsFilters(props: Props) {
           label="Дата начала"
           placeholder="Выберите дату"
           value={props.startDate}
-          onChange={props.onStartDateChange}
+          onChange={(value) => props.onStartDateChange(toDateKey(value))}
           valueFormat="DD.MM.YYYY"
           locale="ru"
           clearable
@@ -41,7 +47,7 @@ export default function MeasurementsFilters(props: Props) {
           label="Дата конца"
           placeholder="Выберите дату"
           value={props.endDate}
-          onChange={props.onEndDateChange}
+          onChange={(value) => props.onEndDateChange(toDateKey(value))}
           valueFormat="DD.MM.YYYY"
           locale="ru"
           clearable

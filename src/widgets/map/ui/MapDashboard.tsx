@@ -1,4 +1,6 @@
 import { Box, Paper, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { LoaderLogo } from "@/shared/ui/loader-logo";
+import { useState } from "react";
 import Map, { ScaleControl } from "react-map-gl/maplibre";
 import styles from "./MapDashboard.module.css";
 
@@ -15,6 +17,8 @@ type MapDashboardProps = {
 const mapStyleUrl = import.meta.env.VITE_MAP_STYLE_URL;
 
 export default function MapDashboard({ stats }: MapDashboardProps) {
+  const [mapLoaded, setMapLoaded] = useState(false);
+
   return (
     <Box component="section" aria-labelledby="map-dashboard-title" className={styles.map}>
       <Map
@@ -32,9 +36,16 @@ export default function MapDashboard({ stats }: MapDashboardProps) {
         touchPitch={false}
         touchZoomRotate={false}
         keyboard={false}
+        onLoad={() => setMapLoaded(true)}
       >
         <ScaleControl position="bottom-left" />
       </Map>
+
+      {!mapLoaded && (
+        <Box className={styles.mapLoader} aria-label="Карта загружается">
+          <LoaderLogo size={72} label="Карта загружается" />
+        </Box>
+      )}
 
       <Paper className={styles.heading} radius="lg" shadow="sm" p="lg">
         <Stack gap="xs">

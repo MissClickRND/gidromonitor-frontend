@@ -17,6 +17,16 @@
   margin: 0;
 }
 
+.mapLoader {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: rgba(24, 63, 70, 0.32);
+}
+
 .toolbar {
   position: absolute;
   display: flex;

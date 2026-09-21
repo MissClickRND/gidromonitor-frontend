@@ -5,6 +5,7 @@ import {
   Pagination,
   Paper,
   ScrollArea,
+  Skeleton,
   Table,
   Text,
 } from "@mantine/core";
@@ -17,6 +18,7 @@ type Props = {
   page: number;
   onPageChange: (page: number) => void;
   onOpen: (record: MeasurementRecord) => void;
+  loading?: boolean;
 };
 const pageSize = 8;
 const dateFormatter = new Intl.DateTimeFormat("ru-RU");
@@ -31,6 +33,7 @@ export default function MeasurementsTable({
   page,
   onPageChange,
   onOpen,
+  loading = false,
 }: Props) {
   const totalPages = Math.ceil(records.length / pageSize);
   const visibleRecords = records.slice((page - 1) * pageSize, page * pageSize);
@@ -46,8 +49,13 @@ export default function MeasurementsTable({
   };
   return (
     <Paper radius="lg" withBorder className={styles.tablePaper}>
-      <ScrollArea>
-        <Table verticalSpacing="md" highlightOnHover miw={950}>
+      <ScrollArea className={styles.tableScroll}>
+        <Table
+          verticalSpacing="md"
+          horizontalSpacing="md"
+          highlightOnHover
+          miw={950}
+        >
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Дата измерения</Table.Th>
@@ -59,7 +67,27 @@ export default function MeasurementsTable({
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {visibleRecords.map((record) => (
+            {loading &&
+              Array.from({ length: pageSize }, (_, index) => (
+                <Table.Tr key={`measurement-skeleton-${index}`} aria-hidden="true">
+                  <Table.Td><Skeleton height={18} width="72%" /></Table.Td>
+                  <Table.Td><Skeleton height={18} width="82%" /></Table.Td>
+                  <Table.Td><Skeleton height={18} width="90%" /></Table.Td>
+                  <Table.Td><Skeleton height={18} width="68%" /></Table.Td>
+                  <Table.Td><Skeleton height={24} width={132} radius="sm" /></Table.Td>
+                  <Table.Td><Skeleton height={36} width={44} radius="md" mx="auto" /></Table.Td>
+                </Table.Tr>
+              ))}
+            {!loading && !visibleRecords.length && (
+              <Table.Tr>
+                <Table.Td colSpan={6}>
+                  <Text ta="center" c="dimmed" py="xl">
+                    Ничего не найдено
+                  </Text>
+                </Table.Td>
+              </Table.Tr>
+            )}
+            {!loading && visibleRecords.map((record) => (
               <Table.Tr key={record.id}>
                 <Table.Td>
                   {dateFormatter.format(
@@ -104,12 +132,13 @@ export default function MeasurementsTable({
           </Table.Tbody>
         </Table>
       </ScrollArea>
-      {!visibleRecords.length && (
-        <Text ta="center" c="dimmed" py="xl">
-          Ничего не найдено
-        </Text>
+      {loading && (
+        <Group justify="space-between" p="md" className={styles.pagination}>
+          <Skeleton height={16} width={170} />
+          <Skeleton height={32} width={180} radius="sm" />
+        </Group>
       )}
-      {totalPages > 1 && (
+      {!loading && totalPages > 1 && (
         <Group justify="space-between" p="md" className={styles.pagination}>
           <Text size="sm" c="dimmed">
             Показано {(page - 1) * pageSize + 1}–

@@ -1,19 +1,28 @@
 .page {
+  height: 100svh;
   min-height: 100svh;
-  padding: 80px 24px 40px;
+  overflow: hidden;
+  padding: 80px 24px 24px;
   background: #f5f8f8;
 }
 .content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   max-width: 1320px;
   margin: 0 auto;
 }
 .heading {
+  flex: 0 0 auto;
   margin-bottom: 24px;
 }
 .heading h1 {
   color: #15364a;
 }
 .filters {
+  flex: 0 0 auto;
   margin-bottom: 18px;
   background: #fff;
 }
@@ -24,18 +33,34 @@
   flex: 0 1 210px;
 }
 .tablePaper {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
   overflow: hidden;
   background: #fff;
 }
+.tableScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.tableScroll :global(.mantine-ScrollArea-viewport) {
+  height: 100%;
+}
 .pagination {
+  flex: 0 0 auto;
   border-top: 1px solid var(--mantine-color-gray-2);
+}
+.error {
+  flex: 0 0 auto;
+  margin: -6px 0 12px;
 }
 .drawerBody {
   padding-top: 0;
 }
 @media (max-width: 48em) {
   .page {
-    padding: 92px 12px 24px;
+    padding: 92px 12px 12px;
   }
   .heading {
     gap: 16px;

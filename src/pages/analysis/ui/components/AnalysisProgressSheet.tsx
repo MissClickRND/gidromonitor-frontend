@@ -1,6 +1,6 @@
 import type { IAreaResponse } from "@/entities/areas";
+import { LoaderLogo } from "@/shared/ui/loader-logo";
 import { Button, Drawer, Stack, Text, Title } from "@mantine/core";
-import AnalysisProcessingLoader from "./AnalysisProcessingLoader";
 import styles from "./AnalysisProgressSheet.module.css";
 
 type AnalysisProgressSheetProps = {
@@ -38,7 +38,7 @@ export default function AnalysisProgressSheet({
       }}
     >
       <Stack align="center" justify="center" className={styles.message}>
-        <AnalysisProcessingLoader />
+        <LoaderLogo label="Анализ выполняется" />
         <Stack align="center" gap={8} maw={500}>
           <Title order={2} ta="center" c="#173a4c">
             Анализ запущен

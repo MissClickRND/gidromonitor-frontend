@@ -1,4 +1,5 @@
 import type { Coordinate, TerritoryMode } from "@/features/create-analysis";
+import { LoaderLogo } from "@/shared/ui/loader-logo";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconCheck, IconTrash } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -165,7 +166,9 @@ export default function AnalysisMap({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={finishRectangle}
-        onLoad={refreshProjection}
+        onLoad={() => {
+          refreshProjection();
+        }}
         onMove={refreshProjection}
         onResize={refreshProjection}
       >

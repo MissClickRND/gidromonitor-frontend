@@ -1,7 +1,8 @@
 import { useArea } from "@/entities/areas";
 import { useState } from "react";
-import { Center, Loader, Stack, Text } from "@mantine/core";
+import { Center, Stack, Text } from "@mantine/core";
 import { useParams } from "react-router-dom";
+import { LoaderLogo } from "@/shared/ui/loader-logo";
 import { AnalysisResultCompare } from "@/widgets/analysis-result-compare";
 import { AnalysisResultHeader } from "@/widgets/analysis-result-header";
 import { ResultLayersSection } from "./sections/ResultLayersSection";
@@ -18,7 +19,7 @@ export default function AnalysisResultPage() {
   if (isPending) {
     return (
       <main className={styles.page}>
-        <Center h="100svh"><Loader color="white" /></Center>
+        <Center h="100svh"><LoaderLogo size={96} label="Загрузка результата анализа" /></Center>
       </main>
     );
   }

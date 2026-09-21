@@ -1,7 +1,8 @@
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
-import { measurementRecords, type MeasurementRecord } from "../model/mock";
+import { useAreas } from "@/entities/areas";
+import { areaToMeasurementRecord, type MeasurementRecord } from "../model/mock";
 import MeasurementPreviewDrawer from "./components/MeasurementPreviewDrawer";
 import MeasurementsFilters from "./components/MeasurementsFilters";
 import MeasurementsTable from "./components/MeasurementsTable";
@@ -10,12 +11,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function CalculationsPage() {
   const navigate = useNavigate();
+  const { data: areas = [], isPending, isError } = useAreas();
   const [query, setQuery] = useState("");
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [selectedRecord, setSelectedRecord] =
     useState<MeasurementRecord | null>(null);
+
+  const measurementRecords = useMemo(
+    () => areas.map(areaToMeasurementRecord),
+    [areas],
+  );
 
   const records = useMemo(() => {
     if (startDate && endDate && startDate > endDate) return [];
@@ -27,7 +34,7 @@ export default function CalculationsPage() {
         (!startDate || record.eventDate >= startDate) &&
         (!endDate || record.eventDate <= endDate),
     );
-  }, [endDate, query, startDate]);
+  }, [endDate, measurementRecords, query, startDate]);
 
   const resetFilters = () => {
     setQuery("");
@@ -76,8 +83,14 @@ export default function CalculationsPage() {
           }}
           onReset={resetFilters}
         />
+        {isError && (
+          <Text className={styles.error} c="red" ta="center">
+            Не удалось загрузить измерения.
+          </Text>
+        )}
         <MeasurementsTable
-          records={records}
+          records={isError ? [] : records}
+          loading={isPending}
           page={page}
           onPageChange={setPage}
           onOpen={setSelectedRecord}
@@ -86,6 +99,9 @@ export default function CalculationsPage() {
       <MeasurementPreviewDrawer
         record={selectedRecord}
         onClose={() => setSelectedRecord(null)}
+        onView={() => {
+          if (selectedRecord) navigate(`/analysis/result/${selectedRecord.id}`);
+        }}
       />
     </Box>
   );

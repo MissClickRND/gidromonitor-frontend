@@ -7,11 +7,17 @@ import {
   Stack,
   Text,
   Title,
+  Button,
 } from "@mantine/core";
+import { IconArrowRight } from "@tabler/icons-react";
 import type { MeasurementRecord } from "../../model/mock";
 import styles from "../Calculations.page.module.css";
 
-type Props = { record: MeasurementRecord | null; onClose: () => void };
+type Props = {
+  record: MeasurementRecord | null;
+  onClose: () => void;
+  onView: () => void;
+};
 const dateFormatter = new Intl.DateTimeFormat("ru-RU");
 const areaFormatter = new Intl.NumberFormat("ru-RU");
 const colors: Record<MeasurementRecord["eventType"], string> = {
@@ -20,7 +26,7 @@ const colors: Record<MeasurementRecord["eventType"], string> = {
   "Стабильное состояние": "blue",
 };
 
-export default function MeasurementPreviewDrawer({ record, onClose }: Props) {
+export default function MeasurementPreviewDrawer({ record, onClose, onView }: Props) {
   return (
     <Drawer
       opened={Boolean(record)}
@@ -45,7 +51,6 @@ export default function MeasurementPreviewDrawer({ record, onClose }: Props) {
               {dateFormatter.format(new Date(`${record.eventDate}T00:00:00`))}
             </Text>
             <Title order={3}>{record.name}</Title>
-            <Text c="dimmed">{record.region}</Text>
           </Stack>
           <Paper withBorder radius="md" p="md">
             <Stack gap="sm">
@@ -61,6 +66,13 @@ export default function MeasurementPreviewDrawer({ record, onClose }: Props) {
               </Group>
             </Stack>
           </Paper>
+          <Button
+            fullWidth
+            rightSection={<IconArrowRight size={17} />}
+            onClick={onView}
+          >
+            Просмотреть результат
+          </Button>
         </Stack>
       )}
     </Drawer>

@@ -2,7 +2,8 @@ import { Compare } from "@gfazioli/mantine-compare";
 import { Box, Text } from "@mantine/core";
 import { localCogPreviewLayer, type ResultLayer } from "@/pages/analysis-result/model/layers";
 import { registerCogProtocol } from "@/shared/lib";
-import { useState } from "react";
+import { LoaderLogo } from "@/shared/ui/loader-logo";
+import { useEffect, useState } from "react";
 import Map from "react-map-gl/maplibre";
 import ResultCogLayers from "./ResultCogLayers";
 import styles from "./AnalysisResultCompare.module.css";
@@ -41,6 +42,12 @@ function MapPane({
   onViewStateChange,
   layers,
 }: MapPaneProps) {
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  useEffect(() => {
+    setMapLoaded(false);
+  }, [streetsView]);
+
   return (
     <Box className={styles.mapPane}>
       <Map
@@ -51,9 +58,15 @@ function MapPane({
         touchPitch={false}
         touchZoomRotate={false}
         onMove={(event) => onViewStateChange(event.viewState)}
+        onLoad={() => setMapLoaded(true)}
       >
         <ResultCogLayers layers={[localCogPreviewLayer, ...layers]} />
       </Map>
+      {!mapLoaded && (
+        <Box className={styles.mapLoader} aria-label="Карта загружается">
+          <LoaderLogo size={72} label="Карта загружается" />
+        </Box>
+      )}
       <Box className={styles.mapLabel} data-side={side}>
         <Text className={styles.mapLabelTitle}>{label}</Text>
         <Text className={styles.mapLabelDate}>{date}</Text>

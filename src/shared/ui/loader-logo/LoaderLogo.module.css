@@ -1,5 +1,7 @@
 .loaderLogo {
+  display: block;
   overflow: visible;
+  flex: 0 0 auto;
 }
 
 .logoPart {

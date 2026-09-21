@@ -1,6 +1,17 @@
 .map {
+  position: relative;
   width: 100%;
   height: min(68vh, 640px);
   min-height: 360px;
   overflow: hidden;
+}
+
+.mapLoader {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: rgba(24, 63, 70, 0.32);
 }
