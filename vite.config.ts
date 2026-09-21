@@ -5,6 +5,15 @@ import { resolve } from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      "/__cog_bucket/": {
+        target: "https://storage.yandexcloud.net",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/__cog_bucket/, ""),
+      },
+    },
+  },
   optimizeDeps: {
     exclude: ["maplibre-gl"],
   },

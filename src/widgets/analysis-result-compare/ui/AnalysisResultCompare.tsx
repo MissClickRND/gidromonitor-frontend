@@ -1,6 +1,6 @@
 import { Compare } from "@gfazioli/mantine-compare";
 import { Box, Text } from "@mantine/core";
-import { localCogPreviewLayer, type ResultLayer } from "@/pages/analysis-result/model/layers";
+import type { ResultLayer } from "@/pages/analysis-result/model/layers";
 import { registerCogProtocol } from "@/shared/lib";
 import { LoaderLogo } from "@/shared/ui/loader-logo";
 import { useEffect, useState } from "react";
@@ -18,7 +18,8 @@ type AnalysisResultCompareProps = {
   streetsView: boolean;
   dateBefore: Date;
   dateAfter: Date;
-  layers: ResultLayer[];
+  sourceUrl: string;
+  activeLayers: ResultLayer[];
 };
 
 const dateFormatter = new Intl.DateTimeFormat("ru-RU");
@@ -30,7 +31,8 @@ type MapPaneProps = {
   streetsView: boolean;
   viewState: typeof initialViewState;
   onViewStateChange: (viewState: typeof initialViewState) => void;
-  layers: ResultLayer[];
+  sourceUrl: string;
+  activeLayers: ResultLayer[];
 };
 
 function MapPane({
@@ -40,7 +42,8 @@ function MapPane({
   streetsView,
   viewState,
   onViewStateChange,
-  layers,
+  sourceUrl,
+  activeLayers,
 }: MapPaneProps) {
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -60,13 +63,14 @@ function MapPane({
         onMove={(event) => onViewStateChange(event.viewState)}
         onLoad={() => setMapLoaded(true)}
       >
-        <ResultCogLayers layers={[localCogPreviewLayer, ...layers]} />
+        <ResultCogLayers sourceUrl={sourceUrl} activeLayers={activeLayers} />
       </Map>
       {!mapLoaded && (
         <Box className={styles.mapLoader} aria-label="Карта загружается">
           <LoaderLogo size={72} label="Карта загружается" />
         </Box>
       )}
+
       <Box className={styles.mapLabel} data-side={side}>
         <Text className={styles.mapLabelTitle}>{label}</Text>
         <Text className={styles.mapLabelDate}>{date}</Text>
@@ -79,7 +83,8 @@ export default function AnalysisResultCompare({
   streetsView,
   dateBefore,
   dateAfter,
-  layers,
+  sourceUrl,
+  activeLayers,
 }: AnalysisResultCompareProps) {
   const [viewState, setViewState] = useState(initialViewState);
 
@@ -97,7 +102,8 @@ export default function AnalysisResultCompare({
           streetsView={streetsView}
           viewState={viewState}
           onViewStateChange={setViewState}
-          layers={layers}
+          sourceUrl={sourceUrl}
+          activeLayers={activeLayers}
         />
       }
       rightSection={
@@ -108,7 +114,8 @@ export default function AnalysisResultCompare({
           streetsView={streetsView}
           viewState={viewState}
           onViewStateChange={setViewState}
-          layers={layers}
+          sourceUrl={sourceUrl}
+          activeLayers={activeLayers}
         />
       }
       classNames={{

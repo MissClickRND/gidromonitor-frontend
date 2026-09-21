@@ -24,8 +24,6 @@ export function ResultLayersSection({
       typeof window === "undefined" ||
       window.matchMedia("(min-width: 48em)").matches,
   );
-  const waterLayers = layers.filter((layer) => layer.group === "water");
-  const satelliteLayers = layers.filter((layer) => layer.group === "satellite");
 
   return (
     <Paper
@@ -65,15 +63,9 @@ export function ResultLayersSection({
           aria-label="Слои отображения"
         >
           <Stack gap={0} className={styles.layers}>
-            {[waterLayers, satelliteLayers].map((group, groupIndex) => (
-              <Stack
-                key={groupIndex}
-                gap={0}
-                className={groupIndex ? styles.sensorGroup : undefined}
-              >
-                {group.map((layer) => (
+            {layers.map((layer) => (
                   <Checkbox
-                    key={layer.label}
+                    key={layer.id}
                     value={layer.id}
                     label={
                       <Group gap={8} wrap="nowrap">
@@ -87,8 +79,6 @@ export function ResultLayersSection({
                     className={styles.layer}
                     size="sm"
                   />
-                ))}
-              </Stack>
             ))}
           </Stack>
         </Checkbox.Group>

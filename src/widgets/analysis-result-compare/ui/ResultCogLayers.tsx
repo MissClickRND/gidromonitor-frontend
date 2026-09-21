@@ -1,36 +1,31 @@
 import type { ResultLayer } from "@/pages/analysis-result/model/layers";
 import { Layer, Source } from "react-map-gl/maplibre";
 import { configureCogRendering } from "../lib/configureCogRendering";
+import { resolveCogUrl } from "../lib/resolveCogUrl";
 
 type ResultCogLayersProps = {
-  layers: ResultLayer[];
+  sourceUrl: string;
+  activeLayers: ResultLayer[];
 };
 
-function toCogUrl(sourceUrl: string) {
-  return `cog://${new URL(sourceUrl, window.location.origin).href}`;
-}
+export default function ResultCogLayers({ sourceUrl, activeLayers }: ResultCogLayersProps) {
+  configureCogRendering(sourceUrl, activeLayers);
+  const styleKey = activeLayers.map((layer) => layer.id).join("-") || "base";
+  const absoluteUrl = resolveCogUrl(sourceUrl);
 
-export default function ResultCogLayers({ layers }: ResultCogLayersProps) {
-  const visibleLayers = layers.filter((layer) => layer.sourceUrl);
-  visibleLayers.forEach(configureCogRendering);
-
-  return visibleLayers.map((layer) => {
-    const styleKey = JSON.stringify({ url: layer.sourceUrl, color: layer.color, style: layer.cogStyle });
-
-    return (
-      <Source
-        key={`${layer.id}-${styleKey}`}
-        id={`result-cog-source-${layer.id}`}
+  return (
+    <Source
+      key={`${absoluteUrl}-${styleKey}`}
+      id="result-cog-source"
+      type="raster"
+      url={`cog://${absoluteUrl}#selection-${styleKey}`}
+      tileSize={256}
+    >
+      <Layer
+        id="result-cog-layer"
         type="raster"
-        url={toCogUrl(layer.sourceUrl as string)}
-        tileSize={256}
-      >
-        <Layer
-          id={`result-cog-layer-${layer.id}`}
-          type="raster"
-          paint={{ "raster-opacity": layer.opacity ?? 1 }}
-        />
-      </Source>
-    );
-  });
+        paint={{ "raster-opacity": 0.85 }}
+      />
+    </Source>
+  );
 }

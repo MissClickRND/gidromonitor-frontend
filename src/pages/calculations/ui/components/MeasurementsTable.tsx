@@ -10,6 +10,7 @@ import {
   Text,
 } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
+import { useLayoutEffect, useRef, useState } from "react";
 import type { MeasurementRecord } from "../../model/mock";
 import styles from "../Calculations.page.module.css";
 
@@ -20,7 +21,7 @@ type Props = {
   onOpen: (record: MeasurementRecord) => void;
   loading?: boolean;
 };
-const pageSize = 8;
+const initialPageSize = 8;
 const dateFormatter = new Intl.DateTimeFormat("ru-RU");
 const colors: Record<MeasurementRecord["eventType"], string> = {
   "Новое затопление": "red",
@@ -35,8 +36,39 @@ export default function MeasurementsTable({
   onOpen,
   loading = false,
 }: Props) {
+  const paperRef = useRef<HTMLDivElement>(null);
+  const [pageSize, setPageSize] = useState(initialPageSize);
+
+  useLayoutEffect(() => {
+    const paper = paperRef.current;
+    const container = paper?.parentElement;
+    if (!paper || !container) return;
+
+    const measure = () => {
+      const available = container.getBoundingClientRect().bottom - paper.getBoundingClientRect().top;
+      const headerHeight = paper.querySelector("thead")?.getBoundingClientRect().height ?? 52;
+      const rowHeight = paper.querySelector("tbody tr")?.getBoundingClientRect().height ?? 76;
+      const rowsWithoutFooter = Math.max(1, Math.floor((available - headerHeight - 4) / rowHeight));
+      const footerHeight = 72;
+      const nextSize = !loading && records.length <= rowsWithoutFooter
+        ? rowsWithoutFooter
+        : Math.max(1, Math.floor((available - headerHeight - footerHeight - 4) / rowHeight));
+      setPageSize((current) => current === nextSize ? current : nextSize);
+    };
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [loading, records.length]);
+
   const totalPages = Math.ceil(records.length / pageSize);
-  const visibleRecords = records.slice((page - 1) * pageSize, page * pageSize);
+  const currentPage = Math.min(page, Math.max(1, totalPages));
+  const visibleRecords = records.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const formatPeriod = (record: MeasurementRecord) => {
     const fallbackStart = new Date(`${record.eventDate}T00:00:00`);
     fallbackStart.setDate(fallbackStart.getDate() - 7);
@@ -48,7 +80,7 @@ export default function MeasurementsTable({
       : `${dateFormatter.format(new Date(`${start}T00:00:00`))} — ${dateFormatter.format(new Date(`${end}T00:00:00`))}`;
   };
   return (
-    <Paper radius="lg" withBorder className={styles.tablePaper}>
+    <Paper ref={paperRef} radius="lg" withBorder className={styles.tablePaper}>
       <ScrollArea className={styles.tableScroll}>
         <Table
           verticalSpacing="md"
@@ -141,12 +173,12 @@ export default function MeasurementsTable({
       {!loading && totalPages > 1 && (
         <Group justify="space-between" p="md" className={styles.pagination}>
           <Text size="sm" c="dimmed">
-            Показано {(page - 1) * pageSize + 1}–
-            {Math.min(page * pageSize, records.length)} из {records.length}
+            Показано {(currentPage - 1) * pageSize + 1}–
+            {Math.min(currentPage * pageSize, records.length)} из {records.length}
           </Text>
           <Pagination
             total={totalPages}
-            value={page}
+            value={currentPage}
             onChange={onPageChange}
             withEdges
           />

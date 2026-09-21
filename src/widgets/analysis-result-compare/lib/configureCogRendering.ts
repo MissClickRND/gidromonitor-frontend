@@ -1,70 +1,76 @@
 import { setColorFunction } from "@geomatico/maplibre-cog-protocol";
-import type { CogStyle, ResultLayer } from "@/pages/analysis-result/model/layers";
+import { analysisBands, type ResultLayer } from "@/pages/analysis-result/model/layers";
+import { resolveCogUrl } from "./resolveCogUrl";
 
 const configuredStyles = new Map<string, string>();
 
-function getAbsoluteUrl(sourceUrl: string) {
-  return new URL(sourceUrl, window.location.origin).href;
+function stretch(value: number, [minimum, maximum]: readonly [number, number]) {
+  return Math.max(0, Math.min(1, (value - minimum) / (maximum - minimum)));
 }
 
-function parseHexColor(color: string): [number, number, number] {
-  const value = Number.parseInt(color.replace("#", ""), 16);
+function parseColor(color: string): [number, number, number] {
+  const value = Number.parseInt(color.slice(1), 16);
   return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
 }
 
-function stretch(value: number, [minimum, maximum]: readonly [number, number]) {
-  if (!Number.isFinite(value)) return 0;
-  return Math.round(255 * Math.max(0, Math.min(1, (value - minimum) / (maximum - minimum))));
-}
-
-function createColorFunction(style: CogStyle, tint: [number, number, number]) {
-  if (style.type === "rgb") {
-    return (pixel: ArrayLike<number>, outputColor: Uint8ClampedArray) => {
-      const [redBand, greenBand, blueBand] = style.bands;
-      const red = pixel[redBand];
-      const green = pixel[greenBand];
-      const blue = pixel[blueBand];
-      const isEmpty = style.transparentWhenRgbZero && red === 0 && green === 0 && blue === 0;
-      const isInvalid = !Number.isFinite(red) || !Number.isFinite(green) || !Number.isFinite(blue);
-
-      if (isEmpty || isInvalid) {
-        outputColor.set([0, 0, 0, 0]);
-        return;
-      }
-
-      outputColor.set([
-        stretch(red, style.ranges[0]),
-        stretch(green, style.ranges[1]),
-        stretch(blue, style.ranges[2]),
-        255,
-      ]);
-    };
+function renderBase(pixel: ArrayLike<number>, output: Uint8ClampedArray) {
+  const hand = pixel[0];
+  const ndvi = pixel[1];
+  const ndwi = pixel[2];
+  if (![hand, ndvi, ndwi].every(Number.isFinite)) {
+    output.set([0, 0, 0, 0]);
+    return;
   }
 
-  return (pixel: ArrayLike<number>, outputColor: Uint8ClampedArray) => {
-    const value = pixel[style.band];
-    if (!Number.isFinite(value) || (style.transparentWhenZero && value === 0)) {
-      outputColor.set([0, 0, 0, 0]);
+  output.set([
+    Math.round(stretch(ndwi, analysisBands[2].range) * 255),
+    Math.round(stretch(ndvi, analysisBands[1].range) * 255),
+    Math.round(stretch(hand, analysisBands[0].range) * 255),
+    220,
+  ]);
+}
+
+export function configureCogRendering(sourceUrl: string, activeLayers: ResultLayer[]) {
+  const absoluteUrl = resolveCogUrl(sourceUrl);
+  const styleKey = activeLayers.map((layer) => layer.id).join(",") || "base";
+  if (configuredStyles.get(absoluteUrl) === styleKey) return;
+  const selectedBands = activeLayers.map((layer) => ({
+    band: layer.band,
+    range: layer.range,
+    color: parseColor(layer.color),
+  }));
+
+  setColorFunction(absoluteUrl, (pixel, output) => {
+    if (!selectedBands.length) {
+      renderBase(pixel, output);
       return;
     }
 
-    const intensity = stretch(value, style.range) / 255;
-    outputColor.set([
-      Math.round(tint[0] * intensity),
-      Math.round(tint[1] * intensity),
-      Math.round(tint[2] * intensity),
-      255,
+    let red = 0;
+    let green = 0;
+    let blue = 0;
+    let contributors = 0;
+    for (const layer of selectedBands) {
+      const value = pixel[layer.band];
+      if (!Number.isFinite(value)) continue;
+      const intensity = stretch(value, layer.range);
+      const [r, g, b] = layer.color;
+      red += r * intensity;
+      green += g * intensity;
+      blue += b * intensity;
+      contributors++;
+    }
+
+    if (!contributors) {
+      output.set([0, 0, 0, 0]);
+      return;
+    }
+    output.set([
+      Math.round(red / contributors),
+      Math.round(green / contributors),
+      Math.round(blue / contributors),
+      225,
     ]);
-  };
-}
-
-export function configureCogRendering(layer: ResultLayer) {
-  if (!layer.sourceUrl || !layer.cogStyle) return;
-
-  const sourceUrl = getAbsoluteUrl(layer.sourceUrl);
-  const styleKey = JSON.stringify({ color: layer.color, style: layer.cogStyle });
-  if (configuredStyles.get(sourceUrl) === styleKey) return;
-
-  setColorFunction(sourceUrl, createColorFunction(layer.cogStyle, parseHexColor(layer.color)));
-  configuredStyles.set(sourceUrl, styleKey);
+  });
+  configuredStyles.set(absoluteUrl, styleKey);
 }
