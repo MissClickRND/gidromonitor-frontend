@@ -1,6 +1,7 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/charts/styles.css";
 import "@gfazioli/mantine-compare/styles.css";
 import "dayjs/locale/ru";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -25,3 +26,4 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </QueryClientProvider>
   </React.StrictMode>,
 );
+  

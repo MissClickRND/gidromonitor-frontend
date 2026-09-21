@@ -1,4 +1,13 @@
-import { ActionIcon, Collapse, Group, Paper, Stack, Switch, Text, UnstyledButton } from "@mantine/core";
+import {
+  ActionIcon,
+  Collapse,
+  Group,
+  Paper,
+  Radio,
+  Stack,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown, IconLayersLinked } from "@tabler/icons-react";
 import { useState } from "react";
@@ -19,52 +28,69 @@ const layerGroups = [
 
 export function ResultLayersSection() {
   const [opened, { toggle }] = useDisclosure(true);
-  const [enabledLayers, setEnabledLayers] = useState(() =>
-    new Set(layerGroups.flat().map((layer) => layer.label)),
-  );
-
-  const toggleLayer = (label: string) => {
-    setEnabledLayers((current) => {
-      const next = new Set(current);
-      if (next.has(label)) next.delete(label);
-      else next.add(label);
-      return next;
-    });
-  };
+  const [selectedLayer, setSelectedLayer] = useState(layerGroups[0][0].label);
 
   return (
     <Paper className={styles.panel} radius="lg" shadow="xl">
-      <UnstyledButton className={styles.trigger} onClick={toggle} aria-expanded={opened}>
+      <UnstyledButton
+        className={styles.trigger}
+        onClick={toggle}
+        aria-expanded={opened}
+      >
         <Group gap={9} wrap="nowrap">
           <IconLayersLinked size={18} stroke={1.8} />
-          <Text fw={500} size="sm">Слои отображения</Text>
+          <Text fw={500} size="sm">
+            Слои отображения
+          </Text>
         </Group>
-        <ActionIcon component="span" variant="subtle" color="gray" aria-hidden="true">
-          <IconChevronDown className={styles.chevron} data-opened={opened || undefined} size={18} />
+        <ActionIcon
+          component="span"
+          variant="subtle"
+          color="gray"
+          aria-hidden="true"
+        >
+          <IconChevronDown
+            className={styles.chevron}
+            data-opened={opened || undefined}
+            size={18}
+          />
         </ActionIcon>
       </UnstyledButton>
 
-      <Collapse in={opened} transitionDuration={220}>
-        <Stack gap={0} className={styles.layers}>
-          {layerGroups.map((group, groupIndex) => (
-            <Stack key={groupIndex} gap={0} className={groupIndex ? styles.sensorGroup : undefined}>
-              {group.map((layer) => (
-                <Group key={layer.label} justify="space-between" wrap="nowrap" className={styles.layer}>
-                  <Group gap={8} wrap="nowrap">
-                    <span className={styles.dot} style={{ background: layer.color }} />
-                    <Text size="xs">{layer.label}</Text>
-                  </Group>
-                  <Switch
-                    checked={enabledLayers.has(layer.label)}
-                    onChange={() => toggleLayer(layer.label)}
+      <Collapse expanded={opened} transitionDuration={220}>
+        <Radio.Group
+          value={selectedLayer}
+          onChange={setSelectedLayer}
+          aria-label="Слой отображения"
+        >
+          <Stack gap={0} className={styles.layers}>
+            {layerGroups.map((group, groupIndex) => (
+              <Stack
+                key={groupIndex}
+                gap={0}
+                className={groupIndex ? styles.sensorGroup : undefined}
+              >
+                {group.map((layer) => (
+                  <Radio
+                    key={layer.label}
+                    value={layer.label}
+                    label={
+                      <Group gap={8} wrap="nowrap">
+                        <span
+                          className={styles.dot}
+                          style={{ background: layer.color }}
+                        />
+                        <Text size="xs">{layer.label}</Text>
+                      </Group>
+                    }
+                    className={styles.layer}
                     size="xs"
-                    aria-label={`Показать слой «${layer.label}»`}
                   />
-                </Group>
-              ))}
-            </Stack>
-          ))}
-        </Stack>
+                ))}
+              </Stack>
+            ))}
+          </Stack>
+        </Radio.Group>
       </Collapse>
     </Paper>
   );

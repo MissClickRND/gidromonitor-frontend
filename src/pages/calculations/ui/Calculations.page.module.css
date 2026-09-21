@@ -1,0 +1,46 @@
+.page {
+  min-height: 100svh;
+  padding: 80px 24px 40px;
+  background: #f5f8f8;
+}
+.content {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.heading {
+  margin-bottom: 24px;
+}
+.heading h1 {
+  color: #15364a;
+}
+.filters {
+  margin-bottom: 18px;
+  background: #fff;
+}
+.search {
+  flex: 1 1 360px;
+}
+.date {
+  flex: 0 1 210px;
+}
+.tablePaper {
+  overflow: hidden;
+  background: #fff;
+}
+.pagination {
+  border-top: 1px solid var(--mantine-color-gray-2);
+}
+.drawerBody {
+  padding-top: 0;
+}
+@media (max-width: 48em) {
+  .page {
+    padding: 92px 12px 24px;
+  }
+  .heading {
+    gap: 16px;
+  }
+  .filters :global(.mantine-Group-root) {
+    align-items: stretch;
+  }
+}
