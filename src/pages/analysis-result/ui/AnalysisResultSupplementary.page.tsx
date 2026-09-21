@@ -1,5 +1,6 @@
 import { Paper, Stack, Text, Title } from "@mantine/core";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { AnalysisResultHeader } from "@/widgets/analysis-result-header";
 import styles from "./AnalysisResultSupplementary.page.module.css";
 
@@ -10,10 +11,14 @@ type SupplementaryPageProps = {
 
 function SupplementaryPage({ title, description }: SupplementaryPageProps) {
   const [streetsView, setStreetsView] = useState(false);
+  const { id } = useParams<{ id: string }>();
+
+  if (!id) return null;
 
   return (
     <main className={styles.page}>
       <AnalysisResultHeader
+        areaId={id}
         streetsView={streetsView}
         onToggleMapStyle={() => setStreetsView((current) => !current)}
       />

@@ -1,17 +1,25 @@
+import type { IAreaResponse } from "@/entities/areas";
 import { Button, Drawer, Stack, Text, Title } from "@mantine/core";
 import AnalysisProcessingLoader from "./AnalysisProcessingLoader";
 import styles from "./AnalysisProgressSheet.module.css";
 
 type AnalysisProgressSheetProps = {
   opened: boolean;
-  onFinish: () => void;
-  onExitTransitionEnd: () => void;
+  area: IAreaResponse | null;
+  onClose: () => void;
 };
+
+const dateFormatter = new Intl.DateTimeFormat("ru-RU", { dateStyle: "long" });
+
+function formatDate(value: Date) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "—" : dateFormatter.format(date);
+}
 
 export default function AnalysisProgressSheet({
   opened,
-  onFinish,
-  onExitTransitionEnd,
+  area,
+  onClose,
 }: AnalysisProgressSheetProps) {
   return (
     <Drawer
@@ -28,20 +36,27 @@ export default function AnalysisProgressSheet({
         content: styles.content,
         body: styles.body,
       }}
-      onExitTransitionEnd={onExitTransitionEnd}
     >
       <Stack align="center" justify="center" className={styles.message}>
         <AnalysisProcessingLoader />
         <Stack align="center" gap={8} maw={500}>
           <Title order={2} ta="center" c="#173a4c">
-            Проводится анализ
+            Анализ запущен
           </Title>
           <Text ta="center" c="dimmed" size="lg" aria-live="polite">
-            Подождите, обычно это занимает 1–3 минуты.
+            Сервер принял заявку и обрабатывает данные. Обычно это занимает 1–3 минуты.
           </Text>
         </Stack>
-        <Button size="md" radius="md" onClick={onFinish}>
-          Закончить анализ
+        {area && (
+          <Stack align="center" gap={4}>
+            <Text fw={600}>{area.name}</Text>
+            <Text size="sm" c="dimmed">
+              Период: {formatDate(area.dateBefore)} — {formatDate(area.dateAfter)}
+            </Text>
+          </Stack>
+        )}
+        <Button size="md" radius="md" onClick={onClose}>
+          Закрыть
         </Button>
       </Stack>
     </Drawer>

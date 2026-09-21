@@ -5,9 +5,18 @@ export type Territory = {
   coordinates: Coordinate[][];
 };
 
-export type ICreateArea = {
+export type StatusArea = "processing" | "done";
+
+export interface ICreateArea {
   name: string;
   geometry: Territory;
   dateBefore: Date;
   dateAfter: Date;
+}
+
+export type IAreaResponse = ICreateArea & {
+  id: string;
+  status: StatusArea;
+  createdAt: Date;
+  updatedAt: Date;
 };

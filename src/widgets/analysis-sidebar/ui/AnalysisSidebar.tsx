@@ -1,9 +1,9 @@
 import {
   AnalysisForm,
-  type AnalysisPayload,
   type Coordinate,
   type TerritoryMode,
 } from "@/features/create-analysis";
+import type { IAreaResponse } from "@/entities/areas";
 import { ActionIcon, Box, Button, Group, Paper } from "@mantine/core";
 import { IconAdjustmentsHorizontal, IconX } from "@tabler/icons-react";
 import { useState } from "react";
@@ -15,7 +15,7 @@ type AnalysisSidebarProps = {
   closedCoordinates: Coordinate[];
   geometryIsValid: boolean;
   onModeChange: (mode: TerritoryMode) => void;
-  onAnalysisStart: (payload: AnalysisPayload) => void;
+  onAnalysisStart: (area: IAreaResponse) => void;
 };
 
 export default function AnalysisSidebar(props: AnalysisSidebarProps) {

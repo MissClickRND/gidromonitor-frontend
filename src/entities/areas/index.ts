@@ -1,2 +1,2 @@
-export { useCreateArea } from "./model/hooks/useCreateArea";
-export type { Coordinate, Territory, ICreateArea } from "./model/types";
+export { useArea, useCreateArea } from "./model/hooks/useCreateArea";
+export type { Coordinate, Territory, IAreaResponse, ICreateArea } from "./model/types";

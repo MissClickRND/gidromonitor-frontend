@@ -14,17 +14,19 @@ import { usePageTransition } from "@/shared/ui/page-transition";
 import styles from "./AnalysisResultHeader.module.css";
 
 type AnalysisResultHeaderProps = {
+  areaId: string;
   streetsView: boolean;
   onToggleMapStyle: () => void;
 };
 
-const resultNavigation = [
-  { label: "Карта", path: "/analysis/result" },
-  { label: "Аналитика", path: "/analysis/result/analytics" },
-  { label: "Отчёт", path: "/analysis/result/report" },
+const getResultNavigation = (areaId: string) => [
+  { label: "Карта", path: `/analysis/result/${areaId}` },
+  { label: "Аналитика", path: `/analysis/result/${areaId}/analytics` },
+  { label: "Отчёт", path: `/analysis/result/${areaId}/report` },
 ];
 
 export default function AnalysisResultHeader({
+  areaId,
   streetsView,
   onToggleMapStyle,
 }: AnalysisResultHeaderProps) {
@@ -69,7 +71,7 @@ export default function AnalysisResultHeader({
           </ActionIcon>
         </Tooltip>
         <Paper className={styles.secondaryNav} radius="md" shadow="md">
-          {resultNavigation.map((item) => {
+          {getResultNavigation(areaId).map((item) => {
             const active = location.pathname === item.path;
             return (
               <UnstyledButton

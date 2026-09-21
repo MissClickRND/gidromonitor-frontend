@@ -1,16 +1,26 @@
 import { Compare } from "@gfazioli/mantine-compare";
 import { Box, Text } from "@mantine/core";
+import { localCogPreviewLayer, type ResultLayer } from "@/pages/analysis-result/model/layers";
+import { registerCogProtocol } from "@/shared/lib";
 import { useState } from "react";
 import Map from "react-map-gl/maplibre";
+import ResultCogLayers from "./ResultCogLayers";
 import styles from "./AnalysisResultCompare.module.css";
 
 const mapStyleUrl = import.meta.env.VITE_MAP_STYLE_URL;
 const streetsStyleUrl = import.meta.env.VITE_MAP_STREETS_STYLE_URL;
 const initialViewState = { longitude: 127.5331, latitude: 50.2907, zoom: 11 };
 
+registerCogProtocol();
+
 type AnalysisResultCompareProps = {
   streetsView: boolean;
+  dateBefore: Date;
+  dateAfter: Date;
+  layers: ResultLayer[];
 };
+
+const dateFormatter = new Intl.DateTimeFormat("ru-RU");
 
 type MapPaneProps = {
   label: string;
@@ -19,6 +29,7 @@ type MapPaneProps = {
   streetsView: boolean;
   viewState: typeof initialViewState;
   onViewStateChange: (viewState: typeof initialViewState) => void;
+  layers: ResultLayer[];
 };
 
 function MapPane({
@@ -28,6 +39,7 @@ function MapPane({
   streetsView,
   viewState,
   onViewStateChange,
+  layers,
 }: MapPaneProps) {
   return (
     <Box className={styles.mapPane}>
@@ -39,7 +51,9 @@ function MapPane({
         touchPitch={false}
         touchZoomRotate={false}
         onMove={(event) => onViewStateChange(event.viewState)}
-      />
+      >
+        <ResultCogLayers layers={[localCogPreviewLayer, ...layers]} />
+      </Map>
       <Box className={styles.mapLabel} data-side={side}>
         <Text className={styles.mapLabelTitle}>{label}</Text>
         <Text className={styles.mapLabelDate}>{date}</Text>
@@ -50,6 +64,9 @@ function MapPane({
 
 export default function AnalysisResultCompare({
   streetsView,
+  dateBefore,
+  dateAfter,
+  layers,
 }: AnalysisResultCompareProps) {
   const [viewState, setViewState] = useState(initialViewState);
 
@@ -62,21 +79,23 @@ export default function AnalysisResultCompare({
       leftSection={
         <MapPane
           label="До"
-          date="18.07.2019"
+          date={dateFormatter.format(new Date(dateBefore))}
           side="before"
           streetsView={streetsView}
           viewState={viewState}
           onViewStateChange={setViewState}
+          layers={layers}
         />
       }
       rightSection={
         <MapPane
           label="После"
-          date="20.07.2019"
+          date={dateFormatter.format(new Date(dateAfter))}
           side="after"
           streetsView={streetsView}
           viewState={viewState}
           onViewStateChange={setViewState}
+          layers={layers}
         />
       }
       classNames={{

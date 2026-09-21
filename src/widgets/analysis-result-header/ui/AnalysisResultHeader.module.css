@@ -45,7 +45,9 @@
   border-radius: 6px;
   color: #647a80;
   font-size: 12px;
-  transition: background-color 160ms ease, color 160ms ease;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
 }
 
 .secondaryLink:hover,
@@ -74,13 +76,13 @@
   .brand {
     top: 68px;
     left: 12px;
+    position: fixed;
   }
 
   .actions {
-    top: 122px;
+    top: 68px;
     right: 12px;
-    left: 12px;
-    justify-content: flex-end;
+    left: auto;
   }
 
   .secondaryLink {
@@ -90,6 +92,11 @@
 }
 
 @media (max-width: 24em) {
+  .actions {
+    top: 122px;
+    right: 12px;
+  }
+
   .newAnalysis,
   .mapStyleButton {
     width: 40px;

@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@geomatico/maplibre-cog-protocol": "^0.10.0",
     "@gfazioli/mantine-compare": "^1.0.10",
     "@mantine/charts": "^9.6.2",
     "@mantine/core": "^9.6.2",

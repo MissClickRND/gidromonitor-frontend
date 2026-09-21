@@ -66,8 +66,14 @@
 
 @media (max-width: 48em) {
   .mapLabel {
-    top: 180px;
-    left: 12px !important;
+    top: 126px;
     width: 124px;
   }
+
+  .mapLabel[data-side="before"] { left: 12px; right: auto; }
+  .mapLabel[data-side="after"] { right: 12px; left: auto; }
+}
+
+@media (max-width: 24em) {
+  .mapLabel { top: 180px; }
 }

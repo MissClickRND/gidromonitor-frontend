@@ -35,7 +35,7 @@ const router = createBrowserRouter([
             element: <AnalysisPage />,
           },
           {
-            path: "/analysis/result",
+            path: "/analysis/result/:id",
             children: [
               { index: true, element: <AnalysisResultPage /> },
               { path: "analytics", element: <AnalysisResultAnalyticsPage /> },

@@ -1,8 +1,9 @@
+import type { IAreaResponse } from "@/entities/areas";
 import { useTerritoryGeometry } from "@/features/create-analysis";
 import { AnalysisMap } from "@/widgets/analysis-map";
 import { AnalysisSidebar } from "@/widgets/analysis-sidebar";
 import { Box } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AnalysisProgressSheet from "./components/AnalysisProgressSheet";
 import styles from "./Analysis.page.module.css";
@@ -10,19 +11,19 @@ import styles from "./Analysis.page.module.css";
 export default function AnalysisPage() {
   const geometry = useTerritoryGeometry();
   const navigate = useNavigate();
-  const [analysisRunning, setAnalysisRunning] = useState(false);
-  const [navigateAfterClose, setNavigateAfterClose] = useState(false);
+  const [processingArea, setProcessingArea] = useState<IAreaResponse | null>(null);
 
-  const handleFinishAnalysis = () => {
-    setNavigateAfterClose(true);
-    setAnalysisRunning(false);
+  const finishProcessing = () => {
+    if (processingArea) {
+      navigate(`/analysis/result/${processingArea.id}`, { replace: true });
+    }
   };
 
-  const handleSheetExit = () => {
-    if (!navigateAfterClose) return;
-    setNavigateAfterClose(false);
-    navigate("/analysis/result");
-  };
+  useEffect(() => {
+    if (processingArea?.status === "done") {
+      navigate(`/analysis/result/${processingArea.id}`, { replace: true });
+    }
+  }, [navigate, processingArea]);
 
   return (
     <>
@@ -42,13 +43,13 @@ export default function AnalysisPage() {
           closedCoordinates={geometry.closedCoordinates}
           geometryIsValid={geometry.isValid}
           onModeChange={geometry.setMode}
-          onAnalysisStart={() => setAnalysisRunning(true)}
+          onAnalysisStart={setProcessingArea}
         />
       </Box>
       <AnalysisProgressSheet
-        opened={analysisRunning}
-        onFinish={handleFinishAnalysis}
-        onExitTransitionEnd={handleSheetExit}
+        opened={Boolean(processingArea)}
+        area={processingArea}
+        onClose={finishProcessing}
       />
     </>
   );

@@ -4,5 +4,5 @@ export const API_BASE_URL =
 export const endpoints = {
   CREATE_AREA: "/areas",
   GET_AREAS: "/areas",
-  GET_AREA_BY_ID: (id: number) => `/areas/${id}`,
+  GET_AREA_BY_ID: (id: string) => `/areas/${id}`,
 };

@@ -3,7 +3,7 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconArrowRight } from "@tabler/icons-react";
 import { useState } from "react";
-import { useCreateArea, type ICreateArea } from "@/entities/areas";
+import { useCreateArea, type IAreaResponse, type ICreateArea } from "@/entities/areas";
 import type {
   AnalysisFormValues,
   AnalysisPayload,
@@ -19,7 +19,7 @@ type AnalysisFormProps = {
   closedCoordinates: Coordinate[];
   geometryIsValid: boolean;
   onModeChange: (mode: TerritoryMode) => void;
-  onAnalysisStart: (payload: AnalysisPayload) => void;
+  onAnalysisStart: (area: IAreaResponse) => void;
 };
 
 function createUtcIsoDate(value: string | null) {
@@ -97,8 +97,8 @@ export default function AnalysisForm({
     };
 
     try {
-      await createAreaAsync(request);
-      onAnalysisStart(payload);
+      const area = await createAreaAsync(request);
+      onAnalysisStart(area);
     } catch {
       // Ошибка уже отображается через уведомление useCreateArea.
     }

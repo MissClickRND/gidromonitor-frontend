@@ -1,7 +1,7 @@
 import { useNotifications } from "@/shared/lib";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ICreateArea } from "../types";
-import { createArea } from "../api/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { ICreateArea } from "../types";
+import { createArea, getAreaById } from "../api/api";
 
 
 export const useCreateArea = () => {
@@ -27,3 +27,10 @@ export const useCreateArea = () => {
     error: mutation.error?.message || null,
   };
 };
+
+export const useArea = (id?: string) =>
+  useQuery({
+    queryKey: ["area", id],
+    queryFn: () => getAreaById(id as string),
+    enabled: Boolean(id),
+  });
