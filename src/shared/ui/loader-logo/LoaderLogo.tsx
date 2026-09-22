@@ -43,7 +43,13 @@ export default function LoaderLogo({
         d="M0 6.4C0 2.86538 2.86538 0 6.4 0H25.6C29.1346 0 32 2.86538 32 6.4V25.6C32 29.1346 29.1346 32 25.6 32H6.4C2.86538 32 0 29.1346 0 25.6V6.4Z"
         fill="#215D61"
       />
-      <circle className={styles.collectorPulse} cx="25.5" cy="25.5" r="1.1" fill="#FBFEFE" />
+      <circle
+        className={styles.collectorPulse}
+        cx="25.5"
+        cy="25.5"
+        r="1.1"
+        fill="#FBFEFE"
+      />
       <g className={styles.logoParts} filter={`url(#${filterId})`}>
         <path
           className={`${styles.logoPart} ${styles.logoPartMain}`}
@@ -55,9 +61,27 @@ export default function LoaderLogo({
           d="M8.52715 17.6319C8.53622 17.6302 8.54526 17.6284 8.55433 17.6267C10.0463 17.5008 11.5037 17.8854 12.686 18.8364C14.8821 20.603 15.262 23.674 13.5034 25.9138C12.5778 27.0755 11.2359 27.8151 9.77377 27.9693C9.76019 27.9718 9.74563 27.9749 9.72627 27.9763C8.18822 28.0763 6.61859 27.6026 5.42944 26.6076C4.44696 25.7929 3.82835 24.6101 3.71326 23.3262C3.57777 21.9772 3.98239 20.6299 4.83571 19.5882C5.77627 18.4339 7.06767 17.7728 8.52715 17.6319Z"
           fill="#FBFEFE"
         />
-        <circle className={`${styles.particle} ${styles.particleOne}`} cx="7.5" cy="8" r="1.2" fill="#FBFEFE" />
-        <circle className={`${styles.particle} ${styles.particleTwo}`} cx="14.5" cy="12.5" r="1" fill="#FBFEFE" />
-        <circle className={`${styles.particle} ${styles.particleThree}`} cx="22.5" cy="9.5" r="1.15" fill="#FBFEFE" />
+        <circle
+          className={`${styles.particle} ${styles.particleOne}`}
+          cx="7.5"
+          cy="8"
+          r="1.2"
+          fill="#FBFEFE"
+        />
+        <circle
+          className={`${styles.particle} ${styles.particleTwo}`}
+          cx="14.5"
+          cy="12.5"
+          r="1"
+          fill="#FBFEFE"
+        />
+        <circle
+          className={`${styles.particle} ${styles.particleThree}`}
+          cx="22.5"
+          cy="9.5"
+          r="1.15"
+          fill="#FBFEFE"
+        />
       </g>
     </svg>
   );

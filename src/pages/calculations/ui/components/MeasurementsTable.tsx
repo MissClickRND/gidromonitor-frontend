@@ -45,15 +45,28 @@ export default function MeasurementsTable({
     if (!paper || !container) return;
 
     const measure = () => {
-      const available = container.getBoundingClientRect().bottom - paper.getBoundingClientRect().top;
-      const headerHeight = paper.querySelector("thead")?.getBoundingClientRect().height ?? 52;
-      const rowHeight = paper.querySelector("tbody tr")?.getBoundingClientRect().height ?? 76;
-      const rowsWithoutFooter = Math.max(1, Math.floor((available - headerHeight - 4) / rowHeight));
+      const available =
+        container.getBoundingClientRect().bottom -
+        paper.getBoundingClientRect().top;
+      const headerHeight =
+        paper.querySelector("thead")?.getBoundingClientRect().height ?? 52;
+      const rowHeight =
+        paper.querySelector("tbody tr")?.getBoundingClientRect().height ?? 76;
+      const rowsWithoutFooter = Math.max(
+        1,
+        Math.floor((available - headerHeight - 4) / rowHeight),
+      );
       const footerHeight = 72;
-      const nextSize = !loading && records.length <= rowsWithoutFooter
-        ? rowsWithoutFooter
-        : Math.max(1, Math.floor((available - headerHeight - footerHeight - 4) / rowHeight));
-      setPageSize((current) => current === nextSize ? current : nextSize);
+      const nextSize =
+        !loading && records.length <= rowsWithoutFooter
+          ? rowsWithoutFooter
+          : Math.max(
+              1,
+              Math.floor(
+                (available - headerHeight - footerHeight - 4) / rowHeight,
+              ),
+            );
+      setPageSize((current) => (current === nextSize ? current : nextSize));
     };
 
     const observer = new ResizeObserver(measure);
@@ -68,7 +81,10 @@ export default function MeasurementsTable({
 
   const totalPages = Math.ceil(records.length / pageSize);
   const currentPage = Math.min(page, Math.max(1, totalPages));
-  const visibleRecords = records.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const visibleRecords = records.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
   const formatPeriod = (record: MeasurementRecord) => {
     const fallbackStart = new Date(`${record.eventDate}T00:00:00`);
     fallbackStart.setDate(fallbackStart.getDate() - 7);
@@ -101,13 +117,28 @@ export default function MeasurementsTable({
           <Table.Tbody>
             {loading &&
               Array.from({ length: pageSize }, (_, index) => (
-                <Table.Tr key={`measurement-skeleton-${index}`} aria-hidden="true">
-                  <Table.Td><Skeleton height={18} width="72%" /></Table.Td>
-                  <Table.Td><Skeleton height={18} width="82%" /></Table.Td>
-                  <Table.Td><Skeleton height={18} width="90%" /></Table.Td>
-                  <Table.Td><Skeleton height={18} width="68%" /></Table.Td>
-                  <Table.Td><Skeleton height={24} width={132} radius="sm" /></Table.Td>
-                  <Table.Td><Skeleton height={36} width={44} radius="md" mx="auto" /></Table.Td>
+                <Table.Tr
+                  key={`measurement-skeleton-${index}`}
+                  aria-hidden="true"
+                >
+                  <Table.Td>
+                    <Skeleton height={18} width="72%" />
+                  </Table.Td>
+                  <Table.Td>
+                    <Skeleton height={18} width="100%" />
+                  </Table.Td>
+                  <Table.Td>
+                    <Skeleton height={18} width="90%" />
+                  </Table.Td>
+                  <Table.Td>
+                    <Skeleton height={18} width="68%" />
+                  </Table.Td>
+                  <Table.Td>
+                    <Skeleton height={24} width={132} radius="sm" />
+                  </Table.Td>
+                  <Table.Td>
+                    <Skeleton height={36} width={44} radius="md" mx="auto" />
+                  </Table.Td>
                 </Table.Tr>
               ))}
             {!loading && !visibleRecords.length && (
@@ -119,48 +150,49 @@ export default function MeasurementsTable({
                 </Table.Td>
               </Table.Tr>
             )}
-            {!loading && visibleRecords.map((record) => (
-              <Table.Tr key={record.id}>
-                <Table.Td>
-                  {dateFormatter.format(
-                    new Date(`${record.eventDate}T00:00:00`),
-                  )}
-                </Table.Td>
-                <Table.Td>
-                  <Text fw={500}>{record.name}</Text>
-                </Table.Td>
-                <Table.Td>
-                  <Text size="sm" c="dimmed">
-                    {formatPeriod(record)}
-                  </Text>
-                </Table.Td>
-                <Table.Td>
-                  {record.measurementType ?? "Измерение территории"}
-                </Table.Td>
-                <Table.Td>
-                  <Badge
-                    variant="light"
-                    color={colors[record.eventType]}
-                    radius="sm"
-                  >
-                    {record.eventType}
-                  </Badge>
-                </Table.Td>
-                <Table.Td>
-                  <Group justify="center">
-                    <ActionIcon
-                      size="lg"
-                      radius="md"
+            {!loading &&
+              visibleRecords.map((record) => (
+                <Table.Tr key={record.id}>
+                  <Table.Td>
+                    {dateFormatter.format(
+                      new Date(`${record.eventDate}T00:00:00`),
+                    )}
+                  </Table.Td>
+                  <Table.Td>
+                    <Text fw={500}>{record.name}</Text>
+                  </Table.Td>
+                  <Table.Td>
+                    <Text size="sm" c="dimmed">
+                      {formatPeriod(record)}
+                    </Text>
+                  </Table.Td>
+                  <Table.Td>
+                    {record.measurementType ?? "Измерение территории"}
+                  </Table.Td>
+                  <Table.Td>
+                    <Badge
                       variant="light"
-                      aria-label={`Открыть измерение ${record.name}`}
-                      onClick={() => onOpen(record)}
+                      color={colors[record.eventType]}
+                      radius="sm"
                     >
-                      <IconEye size={21} />
-                    </ActionIcon>
-                  </Group>
-                </Table.Td>
-              </Table.Tr>
-            ))}
+                      {record.eventType}
+                    </Badge>
+                  </Table.Td>
+                  <Table.Td>
+                    <Group justify="center">
+                      <ActionIcon
+                        size="lg"
+                        radius="md"
+                        variant="light"
+                        aria-label={`Открыть измерение ${record.name}`}
+                        onClick={() => onOpen(record)}
+                      >
+                        <IconEye size={21} />
+                      </ActionIcon>
+                    </Group>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
           </Table.Tbody>
         </Table>
       </ScrollArea>
@@ -174,7 +206,8 @@ export default function MeasurementsTable({
         <Group justify="space-between" p="md" className={styles.pagination}>
           <Text size="sm" c="dimmed">
             Показано {(currentPage - 1) * pageSize + 1}–
-            {Math.min(currentPage * pageSize, records.length)} из {records.length}
+            {Math.min(currentPage * pageSize, records.length)} из{" "}
+            {records.length}
           </Text>
           <Pagination
             total={totalPages}

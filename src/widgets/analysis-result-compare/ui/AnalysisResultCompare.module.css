@@ -6,6 +6,11 @@
   height: 100%;
 }
 
+.compareContainer {
+  position: absolute;
+  inset: 0;
+}
+
 .mapPane {
   position: relative;
   width: 100%;
@@ -13,14 +18,14 @@
   background: #183f46;
 }
 
-.mapLoader {
+.compareLoader {
   position: absolute;
-  z-index: 3;
+  z-index: 5;
   inset: 0;
   display: grid;
   place-items: center;
   pointer-events: none;
-  background: rgba(24, 63, 70, 0.32);
+  background: rgba(7, 25, 30, 0.28);
 }
 
 .mapPane :global(.maplibregl-map) {

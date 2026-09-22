@@ -8,9 +8,14 @@ type ResultCogLayersProps = {
   activeLayers: ResultLayer[];
 };
 
-export default function ResultCogLayers({ sourceUrl, activeLayers }: ResultCogLayersProps) {
+export default function ResultCogLayers({
+  sourceUrl,
+  activeLayers,
+}: ResultCogLayersProps) {
+  if (!activeLayers.length) return null;
+
   configureCogRendering(sourceUrl, activeLayers);
-  const styleKey = activeLayers.map((layer) => layer.id).join("-") || "base";
+  const styleKey = activeLayers.map((layer) => layer.id).join("-");
   const absoluteUrl = resolveCogUrl(sourceUrl);
 
   return (
@@ -24,7 +29,7 @@ export default function ResultCogLayers({ sourceUrl, activeLayers }: ResultCogLa
       <Layer
         id="result-cog-layer"
         type="raster"
-        paint={{ "raster-opacity": 0.85 }}
+        paint={{ "raster-opacity": 1 }}
       />
     </Source>
   );

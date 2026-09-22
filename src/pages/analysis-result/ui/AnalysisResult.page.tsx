@@ -17,7 +17,7 @@ export default function AnalysisResultPage() {
   const { id } = useParams<{ id: string }>();
   const { data: area, isPending, isError } = useArea(id);
   const { data: layerData, isPending: layersPending } = useLayersById(id);
-  const sourceUrl = layerData?.files[0]?.url ||
+  const sourceUrl = layerData?.files.find((file) => file.fileName.startsWith("merged_"))?.url ||
     (import.meta.env.DEV ? "/merged_20260921_211153_cog.tif" : null);
   const layers = useMemo(
     () => sourceUrl ? createResultLayers(sourceUrl) : [],

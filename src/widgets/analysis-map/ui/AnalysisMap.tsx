@@ -1,5 +1,4 @@
 import type { Coordinate, TerritoryMode } from "@/features/create-analysis";
-import { LoaderLogo } from "@/shared/ui/loader-logo";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconCheck, IconTrash } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -53,7 +52,6 @@ export default function AnalysisMap({
     Coordinate[]
   >([]);
   const [streetsView, setStreetsView] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(false);
 
   const visibleCoordinates = rectanglePreview.length
     ? rectanglePreview
@@ -168,7 +166,6 @@ export default function AnalysisMap({
         onMouseMove={handleMouseMove}
         onMouseUp={finishRectangle}
         onLoad={() => {
-          setMapLoaded(true);
           refreshProjection();
         }}
         onMove={refreshProjection}
@@ -176,12 +173,6 @@ export default function AnalysisMap({
       >
         <ScaleControl position="bottom-right" />
       </Map>
-
-      {!mapLoaded && (
-        <div className={styles.mapLoader} aria-label="Карта загружается">
-          <LoaderLogo size={72} label="Карта загружается" />
-        </div>
-      )}
 
       <MapToolbar
         streetsView={streetsView}

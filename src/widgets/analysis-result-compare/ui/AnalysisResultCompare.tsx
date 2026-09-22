@@ -1,9 +1,8 @@
 import { Compare } from "@gfazioli/mantine-compare";
-import { Box, Text } from "@mantine/core";
+import { Box, Loader, Text } from "@mantine/core";
 import type { ResultLayer } from "@/pages/analysis-result/model/layers";
 import { registerCogProtocol } from "@/shared/lib";
-import { LoaderLogo } from "@/shared/ui/loader-logo";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Map from "react-map-gl/maplibre";
 import ResultCogLayers from "./ResultCogLayers";
 import styles from "./AnalysisResultCompare.module.css";
@@ -23,16 +22,18 @@ type AnalysisResultCompareProps = {
 };
 
 const dateFormatter = new Intl.DateTimeFormat("ru-RU");
+type MapPaneSide = "before" | "after";
 
 type MapPaneProps = {
   label: string;
   date: string;
-  side: "before" | "after";
+  side: MapPaneSide;
   streetsView: boolean;
   viewState: typeof initialViewState;
   onViewStateChange: (viewState: typeof initialViewState) => void;
   sourceUrl: string;
   activeLayers: ResultLayer[];
+  onLoadingChange: (side: MapPaneSide, isLoading: boolean) => void;
 };
 
 function MapPane({
@@ -44,12 +45,27 @@ function MapPane({
   onViewStateChange,
   sourceUrl,
   activeLayers,
+  onLoadingChange,
 }: MapPaneProps) {
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [loadedLayersKey, setLoadedLayersKey] = useState("");
+  const activeLayersKey = activeLayers.map((layer) => layer.id).join("-");
+  const cogLoading = Boolean(activeLayersKey) && loadedLayersKey !== activeLayersKey;
+  const isLoading = !mapLoaded || cogLoading;
 
   useEffect(() => {
     setMapLoaded(false);
   }, [streetsView]);
+
+  useEffect(() => {
+    if (!activeLayersKey) {
+      setLoadedLayersKey("");
+    }
+  }, [activeLayersKey]);
+
+  useEffect(() => {
+    onLoadingChange(side, isLoading);
+  }, [isLoading, onLoadingChange, side]);
 
   return (
     <Box className={styles.mapPane}>
@@ -62,15 +78,14 @@ function MapPane({
         touchZoomRotate={false}
         onMove={(event) => onViewStateChange(event.viewState)}
         onLoad={() => setMapLoaded(true)}
+        onSourceData={(event) => {
+          if (event.sourceId === "result-cog-source" && event.isSourceLoaded) {
+            setLoadedLayersKey(activeLayersKey);
+          }
+        }}
       >
         <ResultCogLayers sourceUrl={sourceUrl} activeLayers={activeLayers} />
       </Map>
-      {!mapLoaded && (
-        <Box className={styles.mapLoader} aria-label="Карта загружается">
-          <LoaderLogo size={72} label="Карта загружается" />
-        </Box>
-      )}
-
       <Box className={styles.mapLabel} data-side={side}>
         <Text className={styles.mapLabelTitle}>{label}</Text>
         <Text className={styles.mapLabelDate}>{date}</Text>
@@ -87,43 +102,61 @@ export default function AnalysisResultCompare({
   activeLayers,
 }: AnalysisResultCompareProps) {
   const [viewState, setViewState] = useState(initialViewState);
+  const [loadingPanes, setLoadingPanes] = useState({ before: true, after: true });
+  const setPaneLoading = useCallback(
+    (side: MapPaneSide, isLoading: boolean) => {
+      setLoadingPanes((current) =>
+        current[side] === isLoading ? current : { ...current, [side]: isLoading },
+      );
+    },
+    [],
+  );
 
   return (
-    <Compare
-      className={styles.compare}
-      radius={0}
-      aspectRatio="auto"
-      defaultPosition={50}
-      leftSection={
-        <MapPane
-          label="До"
-          date={dateFormatter.format(new Date(dateBefore))}
-          side="before"
-          streetsView={streetsView}
-          viewState={viewState}
-          onViewStateChange={setViewState}
-          sourceUrl={sourceUrl}
-          activeLayers={activeLayers}
-        />
-      }
-      rightSection={
-        <MapPane
-          label="После"
-          date={dateFormatter.format(new Date(dateAfter))}
-          side="after"
-          streetsView={streetsView}
-          viewState={viewState}
-          onViewStateChange={setViewState}
-          sourceUrl={sourceUrl}
-          activeLayers={activeLayers}
-        />
-      }
-      classNames={{
-        root: styles.compareRoot,
-        slider: styles.slider,
-        sliderLine: styles.sliderLine,
-        sliderButton: styles.sliderButton,
-      }}
-    />
+    <Box className={styles.compareContainer}>
+      <Compare
+        className={styles.compare}
+        radius={0}
+        aspectRatio="auto"
+        defaultPosition={50}
+        leftSection={
+          <MapPane
+            label="До"
+            date={dateFormatter.format(new Date(dateBefore))}
+            side="before"
+            streetsView={streetsView}
+            viewState={viewState}
+            onViewStateChange={setViewState}
+            sourceUrl={sourceUrl}
+            activeLayers={activeLayers}
+            onLoadingChange={setPaneLoading}
+          />
+        }
+        rightSection={
+          <MapPane
+            label="После"
+            date={dateFormatter.format(new Date(dateAfter))}
+            side="after"
+            streetsView={streetsView}
+            viewState={viewState}
+            onViewStateChange={setViewState}
+            sourceUrl={sourceUrl}
+            activeLayers={activeLayers}
+            onLoadingChange={setPaneLoading}
+          />
+        }
+        classNames={{
+          root: styles.compareRoot,
+          slider: styles.slider,
+          sliderLine: styles.sliderLine,
+          sliderButton: styles.sliderButton,
+        }}
+      />
+      {(loadingPanes.before || loadingPanes.after) && (
+        <Box className={styles.compareLoader} role="status" aria-label="Загрузка карты">
+          <Loader color="white" size="lg" />
+        </Box>
+      )}
+    </Box>
   );
 }

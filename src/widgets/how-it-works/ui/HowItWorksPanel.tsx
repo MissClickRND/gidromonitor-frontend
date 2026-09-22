@@ -1,8 +1,16 @@
-import { Box, CloseButton, Container, FocusTrap, Paper, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import {
+  Box,
+  CloseButton,
+  Container,
+  FocusTrap,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useHotkeys, useReducedMotion } from "@mantine/hooks";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, type RefObject } from "react";
-import { howItWorksIntro, howItWorksSteps, incrementalUpdateParagraphs } from "../model/content";
+import { howItWorksIntro, howItWorksSteps } from "../model/content";
 import HowItWorksStep from "./HowItWorksStep";
 import styles from "./HowItWorksPanel.module.css";
 
@@ -12,7 +20,11 @@ type HowItWorksPanelProps = {
   onClose: () => void;
 };
 
-export default function HowItWorksPanel({ opened, returnFocusRef, onClose }: HowItWorksPanelProps) {
+export default function HowItWorksPanel({
+  opened,
+  returnFocusRef,
+  onClose,
+}: HowItWorksPanelProps) {
   const reduceMotion = useReducedMotion();
 
   useHotkeys([["Escape", () => opened && onClose()]]);
@@ -42,17 +54,30 @@ export default function HowItWorksPanel({ opened, returnFocusRef, onClose }: How
             initial={{ y: reduceMotion ? 0 : "100%" }}
             animate={{ y: 0 }}
             exit={{ y: reduceMotion ? 0 : "100%" }}
-            transition={{ duration: reduceMotion ? 0.01 : 0.62, ease: [0.76, 0, 0.24, 1] }}
+            transition={{
+              duration: reduceMotion ? 0.01 : 0.62,
+              ease: [0.76, 0, 0.24, 1],
+            }}
           >
             <FocusTrap.InitialFocus />
-            <CloseButton aria-label="Закрыть описание" size="xl" c="white" className={styles.closeButton} onClick={onClose} />
+            <CloseButton
+              aria-label="Закрыть описание"
+              size="xl"
+              c="white"
+              className={styles.closeButton}
+              onClick={onClose}
+            />
 
             <Box className={styles.scrollArea}>
               <Container size="lg" py={{ base: 72, sm: 96 }}>
                 <Stack gap={64} className={styles.panelContent}>
                   <Stack gap="lg" maw={850}>
-                    <Text className={styles.eyebrow}>ГидроМонитор · Sentinel-1</Text>
-                    <Title id="how-it-works-title" order={2} className={styles.panelTitle}>
+                    <Text className={styles.eyebrow}>ГидроМонитор</Text>
+                    <Title
+                      id="how-it-works-title"
+                      order={2}
+                      className={styles.panelTitle}
+                    >
                       Как это работает?
                     </Title>
                     <Stack gap="md">
@@ -64,13 +89,13 @@ export default function HowItWorksPanel({ opened, returnFocusRef, onClose }: How
                     </Stack>
                   </Stack>
 
-                  <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
+                  <Box component="section" className={styles.roadmap}>
                     {howItWorksSteps.map((step) => (
                       <HowItWorksStep key={step.number} step={step} />
                     ))}
-                  </SimpleGrid>
+                  </Box>
 
-                  <Paper component="section" className={styles.updateCard} radius="lg" p={{ base: "lg", sm: 40 }}>
+                  {/* <Paper component="section" className={styles.updateCard} radius="lg" p={{ base: "lg", sm: 40 }}>
                     <Stack gap="md">
                       <Text className={styles.updateLabel}>Новые наблюдения</Text>
                       <Title order={3} className={styles.updateTitle}>
@@ -82,7 +107,7 @@ export default function HowItWorksPanel({ opened, returnFocusRef, onClose }: How
                         </Text>
                       ))}
                     </Stack>
-                  </Paper>
+                  </Paper> */}
                 </Stack>
               </Container>
             </Box>
